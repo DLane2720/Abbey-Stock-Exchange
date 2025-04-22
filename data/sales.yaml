@@ -1,0 +1,437 @@
+- item_name: Cocktail
+  price: 6.0
+  table: Walk-up
+  timestamp: '2025-03-25T00:26:15.585428'
+- item_name: Rum
+  price: 4.0
+  table: Walk-up
+  timestamp: '2025-03-25T00:26:16.474238'
+- item_name: Cocktail
+  price: 6.0
+  table: Walk-up
+  timestamp: '2025-03-25T00:26:17.387842'
+- item_name: Wine
+  price: 5.0
+  table: Walk-up
+  timestamp: '2025-03-25T00:26:18.625748'
+- item_name: Beer
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T00:27:26.629019'
+- item_name: Beer
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T00:27:27.058640'
+- item_name: Beer
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T00:27:27.282451'
+- item_name: Beer
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T00:27:27.476330'
+- item_name: Whiskey
+  price: 7.0
+  table: Walk-up
+  timestamp: '2025-03-25T00:27:29.087753'
+- item_name: Whiskey
+  price: 7.0
+  table: Walk-up
+  timestamp: '2025-03-25T00:27:29.274767'
+- item_name: Beer
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T11:38:47.669328'
+- item_name: Beer
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T11:38:48.017259'
+- item_name: Rum
+  price: 4.0
+  table: Walk-up
+  timestamp: '2025-03-25T11:38:48.810895'
+- item_name: Vodka
+  price: 4.0
+  table: Walk-up
+  timestamp: '2025-03-25T11:38:50.010331'
+- item_name: Wine
+  price: 5.0
+  table: Walk-up
+  timestamp: '2025-03-25T11:38:51.094982'
+- item_name: Beer
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T11:38:59.538701'
+- item_name: Beer
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T18:45:47.287127'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:07:18.169926'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:07:19.502467'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:07:19.877347'
+- item_name: SweetWater Brewing Company - 420 Extra Pale Ale
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:07:20.632738'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  table: Walk-up
+  timestamp: '2025-03-25T19:07:21.430838'
+- item_name: Westbrook Brewing Co. - Gose
+  price: 3.5
+  table: Walk-up
+  timestamp: '2025-03-25T19:07:22.502597'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:07:23.469858'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:19:31.598646'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:32:46.572459'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:32:47.330409'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  table: new-tab
+  timestamp: '2025-03-25T19:40:27.372488'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.0
+  table: new-tab
+  timestamp: '2025-03-25T19:42:44.905506'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.0
+  table: new-tab
+  timestamp: '2025-03-25T19:42:48.938108'
+- item_name: Hardywood Park Craft Brewery - Gingerbread Stout
+  price: 4.25
+  table: new-tab
+  timestamp: '2025-03-25T19:48:25.056284'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:48:25.659651'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:48:26.235515'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:48:27.153578'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:48:32.235817'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.0
+  table: Steve
+  timestamp: '2025-03-25T19:51:44.836153'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.0
+  table: Danno
+  timestamp: '2025-03-25T19:51:58.534248'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:52:22.910045'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:52:23.984160'
+- item_name: Hardywood Park Craft Brewery - Gingerbread Stout
+  price: 4.25
+  table: Walk-up
+  timestamp: '2025-03-25T19:52:24.601984'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.5
+  table: new-tab
+  timestamp: '2025-03-25T19:52:32.419689'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:52:33.300846'
+- item_name: Hardywood Park Craft Brewery - Gingerbread Stout
+  price: 4.25
+  table: Walk-up
+  timestamp: '2025-03-25T19:52:34.139456'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.0
+  table: Danno
+  timestamp: '2025-03-25T19:52:49.135322'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.5
+  table: new-tab
+  timestamp: '2025-03-25T19:52:55.385555'
+- item_name: Hardywood Park Craft Brewery - Gingerbread Stout
+  price: 4.75
+  table: Walk-up
+  timestamp: '2025-03-25T19:52:56.166189'
+- item_name: SweetWater Brewing Company - 420 Extra Pale Ale
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T19:52:57.135479'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 4.0
+  table: new-tab
+  timestamp: '2025-03-25T19:53:01.282578'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  table: new-tab
+  timestamp: '2025-03-25T19:53:31.387415'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 4.5
+  table: Walk-up
+  timestamp: '2025-03-25T19:53:32.204570'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 4.5
+  table: new-tab
+  timestamp: '2025-03-25T19:53:38.011455'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  table: Walk-up
+  timestamp: '2025-03-25T20:26:22.869281'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  table: Walk-up
+  timestamp: '2025-03-25T20:26:23.289959'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T20:26:24.505076'
+- item_name: Hardywood Park Craft Brewery - Gingerbread Stout
+  price: 4.25
+  table: Walk-up
+  timestamp: '2025-03-25T20:26:25.601174'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  table: Walk-up
+  timestamp: '2025-03-25T21:38:28.431221'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T21:38:29.891492'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  table: Walk-up
+  timestamp: '2025-03-25T21:38:30.754612'
+- item_name: Hardywood Park Craft Brewery - Gingerbread Stout
+  price: 4.25
+  table: Walk-up
+  timestamp: '2025-03-25T21:38:31.877997'
+- item_name: Hardywood Park Craft Brewery - Gingerbread Stout
+  price: 4.25
+  table: Walk-up
+  timestamp: '2025-03-25T21:38:32.262166'
+- item_name: Hardywood Park Craft Brewery - Gingerbread Stout
+  price: 4.25
+  table: Walk-up
+  timestamp: '2025-03-25T21:38:32.605268'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  table: Walk-up
+  timestamp: '2025-03-25T21:40:37.381575'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T21:40:38.149672'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T21:40:38.817672'
+- item_name: SweetWater Brewing Company - 420 Extra Pale Ale
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T21:40:40.559909'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T21:40:42.477659'
+- item_name: Westbrook Brewing Co. - Gose
+  price: 3.5
+  table: Walk-up
+  timestamp: '2025-03-25T21:43:50.906140'
+- item_name: SweetWater Brewing Company - 420 Extra Pale Ale
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T21:43:53.029824'
+- item_name: SweetWater Brewing Company - 420 Extra Pale Ale
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T21:43:53.507202'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.0
+  table: Walk-up
+  timestamp: '2025-03-25T21:43:54.608274'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.5
+  table: Walk-up
+  timestamp: '2025-03-25T21:44:10.940634'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.5
+  table: Walk-up
+  timestamp: '2025-03-25T21:44:11.272483'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  table: Walk-up
+  timestamp: '2025-03-25T21:44:12.819643'
+- item_name: Hardywood Park Craft Brewery - Gingerbread Stout
+  price: 4.25
+  table: Walk-up
+  timestamp: '2025-03-25T21:44:56.928073'
+- item_name: Hardywood Park Craft Brewery - Gingerbread Stout
+  price: 4.25
+  table: Walk-up
+  timestamp: '2025-03-25T21:45:01.253062'
+- item_name: Hardywood Park Craft Brewery - Gingerbread Stout
+  price: 4.25
+  table: Walk-up
+  timestamp: '2025-03-25T21:45:01.702428'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  table: Walk-up
+  timestamp: '2025-03-25T21:45:22.650644'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.0
+  timestamp: '2025-03-27T01:50:15.121287'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.0
+  timestamp: '2025-03-27T01:50:15.999285'
+- item_name: Hardywood Park Craft Brewery - Gingerbread Stout
+  price: 4.25
+  timestamp: '2025-03-27T01:50:16.617608'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  timestamp: '2025-03-27T01:50:18.233548'
+- item_name: SweetWater Brewing Company - 420 Extra Pale Ale
+  price: 3.0
+  timestamp: '2025-03-27T01:50:27.437846'
+- item_name: Westbrook Brewing Co. - Gose
+  price: 3.5
+  timestamp: '2025-03-27T01:50:28.436882'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  timestamp: '2025-03-27T01:50:29.071468'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  timestamp: '2025-03-27T01:50:47.696259'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  timestamp: '2025-03-27T01:50:48.949912'
+- item_name: Westbrook Brewing Co. - Gose
+  price: 3.5
+  timestamp: '2025-03-27T01:50:51.087025'
+- item_name: SweetWater Brewing Company - 420 Extra Pale Ale
+  price: 3.0
+  timestamp: '2025-03-27T01:50:51.808489'
+- item_name: SweetWater Brewing Company - 420 Extra Pale Ale
+  price: 3.0
+  timestamp: '2025-03-27T01:50:53.548755'
+- item_name: Westbrook Brewing Co. - Gose
+  price: 3.5
+  timestamp: '2025-03-27T01:50:57.017922'
+- item_name: Westbrook Brewing Co. - Gose
+  price: 3.5
+  timestamp: '2025-03-27T01:50:57.568451'
+- item_name: Hardywood Park Craft Brewery - Gingerbread Stout
+  price: 4.25
+  timestamp: '2025-03-27T01:54:30.956230'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  timestamp: '2025-03-27T01:54:32.437631'
+- item_name: Westbrook Brewing Co. - Gose
+  price: 3.5
+  timestamp: '2025-03-27T01:54:33.214865'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  timestamp: '2025-03-27T01:54:34.004794'
+- item_name: SweetWater Brewing Company - 420 Extra Pale Ale
+  price: 3.0
+  timestamp: '2025-03-27T01:54:35.888409'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  timestamp: '2025-03-27T01:54:46.849860'
+- item_name: Westbrook Brewing Co. - Gose
+  price: 3.5
+  timestamp: '2025-03-27T01:54:47.671331'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.0
+  timestamp: '2025-03-27T01:54:56.756110'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.0
+  timestamp: '2025-03-27T01:54:57.594007'
+- item_name: SweetWater Brewing Company - 420 Extra Pale Ale
+  price: 3.5
+  timestamp: '2025-03-27T01:55:02.521079'
+- item_name: SweetWater Brewing Company - 420 Extra Pale Ale
+  price: 3.5
+  timestamp: '2025-03-27T01:55:03.237956'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.0
+  timestamp: '2025-03-27T01:55:04.238226'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  timestamp: '2025-03-27T01:57:13.265668'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  timestamp: '2025-03-27T01:57:14.028094'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  timestamp: '2025-03-27T01:57:14.840040'
+- item_name: Westbrook Brewing Co. - Gose
+  price: 3.5
+  timestamp: '2025-03-27T01:57:15.461877'
+- item_name: Westbrook Brewing Co. - Gose
+  price: 3.5
+  timestamp: '2025-03-27T01:57:16.339562'
+- item_name: SweetWater Brewing Company - 420 Extra Pale Ale
+  price: 3.0
+  timestamp: '2025-03-27T01:57:17.020012'
+- item_name: SweetWater Brewing Company - 420 Extra Pale Ale
+  price: 3.0
+  timestamp: '2025-03-27T01:57:17.455804'
+- item_name: Westbrook Brewing Co. - Gose
+  price: 3.5
+  timestamp: '2025-03-27T01:57:20.338723'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  timestamp: '2025-03-27T01:57:22.223192'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  timestamp: '2025-03-27T01:57:22.729000'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  timestamp: '2025-03-27T01:57:23.379077'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  timestamp: '2025-03-27T01:57:24.731840'
+- item_name: Westbrook Brewing Co. - Gose
+  price: 3.5
+  timestamp: '2025-03-27T01:57:25.411641'
+- item_name: SweetWater Brewing Company - 420 Extra Pale Ale
+  price: 3.0
+  timestamp: '2025-03-27T03:10:20.462474'
+- item_name: Cigar City Brewing - Jai Alai IPA
+  price: 3.0
+  timestamp: '2025-03-27T03:10:21.194620'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  timestamp: '2025-03-27T03:10:21.640666'
+- item_name: Hardywood Park Craft Brewery - Gingerbread Stout
+  price: 4.25
+  timestamp: '2025-03-27T03:10:44.916726'

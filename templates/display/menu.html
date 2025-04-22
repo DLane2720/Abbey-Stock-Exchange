@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Abbey Stock Exchange - Live Drink Prices{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/display.css') }}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/display.js') }}"></script>
+{% endblock %}
+
+{% block body_class %}display-menu{% endblock %}
+
+{% block header %}
+{% if settings.logo_path and settings.logo_path|length > 0 %}
+<img src="{{ settings.logo_path }}" alt="Bar Logo" class="bar-logo">
+{% else %}
+<img src="{{ url_for('static', filename='img/Abbey Bar Logo White.png') }}" alt="Bar Logo" class="bar-logo">
+{% endif %}
+<h1> Stock Exchange</h1>
+{% endblock %}
+
+{% block content %}
+<div class="menu-container">
+    <div class="menu-header">
+        <div class="drink-name">Drink</div>
+        <div class="current-price">Price</div>
+        <div class="trend">Trend</div>
+    </div>
+    
+    <div id="drinks-list" class="drinks-list">
+        {% for name, drink in drinks.items() %}
+        <div class="drink-item" data-name="{{ name }}" data-price="{{ drink.current_price }}">
+            <div class="drink-name">{{ name }}</div>
+            <div class="current-price">${{ "%.2f"|format(drink.current_price) }}</div>
+            <div class="trend">
+                {% if drink.trend == 'up' %}
+                <i class="fas fa-arrow-up trend-up"></i>
+                {% elif drink.trend == 'down' %}
+                <i class="fas fa-arrow-down trend-down"></i>
+                {% else %}
+                <i class="fas fa-minus trend-stable"></i>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div class="update-timer">
+    <span>Next Update:</span>
+    <span id="countdown-timer" data-seconds="{{ time_until_update|int }}">
+        {% set minutes = (time_until_update|int) // 60 %}
+        {% set seconds = (time_until_update|int) % 60 %}
+        {{ minutes }}:{{ '%02d'|format(seconds) }}
+    </span>
+    <span>  Buy now before prices change!</span>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Initialize countdown timer
+    let timeUntilUpdate = {{ time_until_update|int }};
+    
+    // Store current prices for comparison
+    const currentPrices = {};
+    
+    // Format time to MM:SS
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+    
+    // Initialize current prices
+    document.querySelectorAll('.drink-item').forEach(function(item) {
+        const name = item.getAttribute('data-name');
+        const price = parseFloat(item.getAttribute('data-price'));
+        currentPrices[name] = price;
+    });
+    
+    // Update countdown timer every second
+    const countdownTimer = setInterval(function() {
+        timeUntilUpdate -= 1;
+        
+        if (timeUntilUpdate <= 0) {
+            timeUntilUpdate = {{ settings.update_interval }};
+        }
+        
+        document.getElementById('countdown-timer').textContent = formatTime(timeUntilUpdate);
+    }, 1000);
+    
+    // Poll for updates every 5 seconds
+    setInterval(function() {
+        updateDrinksList();
+    }, 5000);
+    
+    function updateDrinksList() {
+        fetch('/api/drinks')
+            .then(response => response.json())
+            .then(data => {
+                // Update drinks list
+                const drinksList = document.getElementById('drinks-list');
+                drinksList.innerHTML = '';
+                
+                for (const [name, drink] of Object.entries(data.drinks)) {
+                    const drinkItem = document.createElement('div');
+                    drinkItem.className = 'drink-item';
+                    drinkItem.setAttribute('data-name', name);
+                    drinkItem.setAttribute('data-price', drink.current_price);
+                    
+                    const drinkName = document.createElement('div');
+                    drinkName.className = 'drink-name';
+                    drinkName.textContent = name;
+                    
+                    const currentPrice = document.createElement('div');
+                    currentPrice.className = 'current-price';
+                    currentPrice.textContent = '$' + drink.current_price.toFixed(2);
+                    
+                    // Check if price has changed and add animation classes
+                    if (currentPrices[name] && drink.current_price > currentPrices[name]) {
+                        currentPrice.classList.add('price-increased');
+                    } else if (currentPrices[name] && drink.current_price < currentPrices[name]) {
+                        currentPrice.classList.add('price-decreased');
+                    }
+                    
+                    const trend = document.createElement('div');
+                    trend.className = 'trend';
+                    
+                    let trendIcon;
+                    if (drink.trend === 'up') {
+                        trendIcon = '<i class="fas fa-arrow-up trend-up"></i>';
+                    } else if (drink.trend === 'down') {
+                        trendIcon = '<i class="fas fa-arrow-down trend-down"></i>';
+                    } else {
+                        trendIcon = '<i class="fas fa-minus trend-stable"></i>';
+                    }
+                    
+                    trend.innerHTML = trendIcon;
+                    
+                    drinkItem.appendChild(drinkName);
+                    drinkItem.appendChild(currentPrice);
+                    drinkItem.appendChild(trend);
+                    
+                    drinksList.appendChild(drinkItem);
+                    
+                    // Update stored price
+                    currentPrices[name] = drink.current_price;
+                }
+                
+                // Update countdown timer
+                timeUntilUpdate = data.time_until_update;
+                document.getElementById('countdown-timer').textContent = formatTime(timeUntilUpdate);
+                document.getElementById('countdown-timer').setAttribute('data-seconds', timeUntilUpdate);
+            })
+            .catch(error => {
+                console.error('Error fetching drinks data:', error);
+            });
+    }
+    
+    // Remove animation classes after they complete
+    document.addEventListener('animationend', function(e) {
+        if (e.target.classList.contains('price-increased')) {
+            e.target.classList.remove('price-increased');
+        } else if (e.target.classList.contains('price-decreased')) {
+            e.target.classList.remove('price-decreased');
+        }
+    });
+</script>
+{% endblock %}

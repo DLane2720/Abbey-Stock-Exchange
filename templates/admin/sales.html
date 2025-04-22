@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+
+{% block title %}Abbey Stock Exchange - Admin Sales{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}
+
+{% block body_class %}admin-panel{% endblock %}
+
+{% block header %}
+<div class="admin-header">
+    <div class="header-content">
+        <h1>Abbey Stock Exchange</h1>
+        <a href="{{ url_for('admin_settings') }}" class="settings-icon" title="Settings">
+            <i class="fas fa-cog"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    {# Price update notification removed as requested #}
+    
+    <div class="sales-panel">
+        <div class="update-info">
+            <p>Next price update in <span id="countdown-timer">{{ time_until_update|int }}</span> seconds</p>
+        </div>
+        
+        <form method="POST" action="{{ url_for('admin_sales') }}" class="sales-form" id="sales-form">
+            
+            <div class="drink-grid">
+                {% for name, drink in drinks.items() %}
+                <button type="submit" name="item_name" value="{{ name }}" class="drink-card">
+                    <div class="drink-name">{{ name }}</div>
+                    <div class="price-trend-container">
+                        <div class="drink-price">${{ "%.2f"|format(drink.current_price) }}</div>
+                        <div class="drink-trend">
+                            {% if drink.trend == 'up' %}
+                            <i class="fas fa-arrow-up trend-up"></i>
+                            {% elif drink.trend == 'down' %}
+                            <i class="fas fa-arrow-down trend-down"></i>
+                            {% else %}
+                            <i class="fas fa-minus trend-stable"></i>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="flex-spacer"></div>
+                    <div class="add-indicator">
+                        <i class="fas fa-plus-circle"></i> New Sale
+                    </div>
+                </button>
+                {% endfor %}
+                
+                <!-- Add New Drink card -->
+                <button type="button" class="new-drink-card" id="open-add-drink-modal">
+                    <div class="drink-name">Add New Drink</div>
+                    <div class="drink-icon">
+                        <i class="fas fa-cocktail"></i>
+                    </div>
+                    <div class="flex-spacer"></div>
+                    <div class="add-indicator">
+                        <i class="fas fa-plus-circle"></i> Create Drink
+                    </div>
+                </button>
+            </div>
+            
+            <!-- Hidden input to store action -->
+            <input type="hidden" id="form-action" name="action" value="">
+        </form>
+        
+        <!-- Manage Drinks Button -->
+        <a href="{{ url_for('admin_settings') }}#inventory-section" class="manage-drinks-btn btn btn-secondary btn-wide">
+            <i class="fas fa-cogs"></i> Manage All Drinks
+        </a>
+    </div>
+    
+    <!-- Add Drink Modal -->
+    <div id="add-drink-modal" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Drink</h3>
+                <button type="button" class="modal-close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('admin_settings') }}" id="add-drink-form">
+                    <input type="hidden" name="action" value="add">
+                    
+                    <div class="form-group">
+                        <label for="name">Drink Name:</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="initial_price">Initial Price ($):</label>
+                        <input type="number" id="initial_price" name="initial_price" class="form-control" step="0.01" min="0" value="5.00" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="custom_min_price" name="custom_min_price" class="form-check-input">
+                            <label for="custom_min_price" class="form-check-label">Set custom minimum price</label>
+                        </div>
+                        <input type="number" id="min_price" name="min_price" class="form-control" step="0.01" min="0" value="5.00" disabled required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="max_price">Maximum Price ($):</label>
+                        <input type="number" id="max_price" name="max_price" class="form-control" step="0.01" min="0" value="8.00" required>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-success">Save Drink</button>
+                        <button type="button" class="btn btn-secondary modal-cancel-btn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scale Control Slider -->
+<div class="scale-control-container">
+    <span class="scale-control-label">Card Size:</span>
+    <div class="scale-control">
+        <input type="range" id="scale-slider" min="80" max="150" value="100" step="5">
+    </div>
+    <span id="scale-value" class="scale-value">100%</span>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Update countdown timer every second
+    document.addEventListener('DOMContentLoaded', function() {
+        let timeUntilUpdate = {{ time_until_update|int }};
+        
+        setInterval(function() {
+            timeUntilUpdate -= 1;
+            
+            if (timeUntilUpdate <= 0) {
+                timeUntilUpdate = {{ settings.update_interval }};
+                // Reload the page when timer hits zero to reflect price updates
+                window.location.reload();
+            }
+            
+            document.getElementById('countdown-timer').textContent = timeUntilUpdate;
+        }, 1000);
+        
+        // Modal handling
+        const modal = document.getElementById('add-drink-modal');
+        const openModalBtn = document.getElementById('open-add-drink-modal');
+        const closeModalBtn = document.querySelector('.modal-close-btn');
+        const cancelModalBtn = document.querySelector('.modal-cancel-btn');
+        const modalOverlay = document.querySelector('.modal-overlay');
+        
+        // Open modal
+        openModalBtn.addEventListener('click', function() {
+            modal.classList.remove('hidden');
+            modal.classList.add('visible');
+            // Focus on the drink name input
+            setTimeout(() => {
+                document.getElementById('name').focus();
+            }, 100);
+        });
+        
+        // Close modal functions
+        const closeModal = function() {
+            modal.classList.remove('visible');
+            modal.classList.add('hidden');
+        };
+        
+        // Close modal events
+        if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+        if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeModal);
+        if (modalOverlay) modalOverlay.addEventListener('click', closeModal);
+        
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+        
+        // Prevent click propagation from modal content to overlay
+        const modalContent = document.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+        
+        // Handle form submission with ajax
+        const addDrinkForm = document.getElementById('add-drink-form');
+        if (addDrinkForm) {
+            addDrinkForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Create FormData object
+                const formData = new FormData(this);
+                
+                // Send POST request
+                fetch('{{ url_for("admin_settings") }}', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Close modal
+                        closeModal();
+                        // Reload the page to show the new drink
+                        window.location.reload();
+                    } else {
+                        alert('Error adding drink. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+            });
+            
+            // Handle custom minimum price checkbox
+            const initialPriceInput = document.getElementById('initial_price');
+            const minPriceInput = document.getElementById('min_price');
+            const customMinPriceCheckbox = document.getElementById('custom_min_price');
+            
+            // Update min price when initial price changes (if checkbox not checked)
+            initialPriceInput.addEventListener('input', function() {
+                if (!customMinPriceCheckbox.checked) {
+                    minPriceInput.value = this.value;
+                }
+            });
+            
+            // Enable/disable min price field based on checkbox
+            customMinPriceCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    minPriceInput.disabled = false;
+                    minPriceInput.focus();
+                } else {
+                    minPriceInput.disabled = true;
+                    minPriceInput.value = initialPriceInput.value;
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

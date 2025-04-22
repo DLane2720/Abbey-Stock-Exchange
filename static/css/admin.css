@@ -1,0 +1,733 @@
+/* Admin Panel Styles */
+body.admin-panel {
+    background-color: #f5f5f5;
+}
+
+/* Flex spacer for consistent layout */
+.flex-spacer {
+    flex-grow: 1;
+    height: 0.5rem;
+}
+
+/* Class-based approach for active state */
+.card-active.drink-card {
+    background-color: #1e7e34;
+    border-color: #1c7430;
+}
+
+.card-active.new-drink-card {
+    background-color: #e2e6ea;
+    border-color: #0056b3;
+}
+
+/* Checkbox container for form controls */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.form-check-input {
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+
+.form-check-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+input[type="number"]:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+/* Scale Controls */
+.scale-control-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(52, 58, 64, 0.95);
+    padding: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    border-top: 1px solid #495057;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.scale-control-label {
+    color: #f8f9fa;
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.scale-control {
+    width: 50%;
+    max-width: 250px;
+}
+
+.scale-control input {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: #6c757d;
+    outline: none;
+}
+
+.scale-control input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #28a745;
+    cursor: pointer;
+    border: 1px solid #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.scale-control input::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #28a745;
+    cursor: pointer;
+    border: 1px solid #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.scale-value {
+    color: #f8f9fa;
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    min-width: 2rem;
+}
+
+/* Adjust spacing for slider */
+.admin-container {
+    margin-bottom: 3rem;
+}
+
+/* Scale transform adjustments */
+.drink-grid {
+    transform-origin: top center;
+    transition: transform 0.2s ease;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 1002;
+    position: relative;
+}
+
+.modal-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.modal-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: #6c757d;
+}
+
+.modal-close-btn:hover {
+    color: #343a40;
+}
+
+.modal-body {
+    padding: 1.25rem;
+}
+
+/* Animation for modal */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal.visible {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+.modal.visible .modal-content {
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+/* Standardized Card Design (Both Types) */
+.drink-card, .new-drink-card {
+    height: 168px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    padding: 0.75rem;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+}
+
+/* Green drink card specifics */
+.drink-card {
+    background-color: #28a745;
+    border: 1px solid #218838;
+    color: white;
+}
+
+.drink-card:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.drink-card:active {
+    background-color: #1e7e34;
+    border-color: #1c7430;
+}
+
+/* Blue add new drink card specifics */
+.new-drink-card {
+    background-color: white;
+    border: 1px solid #007bff;
+    color: #333;
+}
+
+.new-drink-card:hover {
+    background-color: #f8f9fa;
+    border-color: #0056b3;
+}
+
+.new-drink-card:active {
+    background-color: #e2e6ea;
+    border-color: #0056b3;
+}
+
+/* Card Content Layout */
+.drink-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    height: 4.4rem; /* Exactly 4 lines at 1.1rem size */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+/* Price and trend container */
+.price-trend-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    margin-bottom: 0.4rem;
+}
+
+.drink-card .drink-price {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.drink-trend {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.drink-card .trend-up {
+    color: #ff9999;
+    font-size: 1.2rem;
+}
+
+.drink-card .trend-down {
+    color: #99ff99;
+    font-size: 1.2rem;
+}
+
+.drink-card .trend-stable {
+    color: white;
+    font-size: 1.2rem;
+}
+
+.new-drink-card .drink-icon {
+    font-size: 1.8rem;
+    color: #007bff;
+    display: flex;
+    justify-content: center;
+    height: 2.8rem;
+    margin: 0.3rem 0 0.5rem;
+}
+
+/* Standardized bottom line and button text */
+.add-indicator {
+    text-align: center;
+    margin-top: auto;
+    padding: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.drink-card .add-indicator {
+    color: white;
+}
+
+.new-drink-card .add-indicator {
+    color: #007bff;
+    border-top-color: rgba(0, 123, 255, 0.3);
+}
+
+.add-indicator i {
+    margin-right: 0.3rem;
+    font-size: 0.9rem;
+}
+
+/* Admin Header Styles */
+.admin-header {
+    background-color: #343a40;
+    color: white;
+    padding: 0.5rem;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.settings-icon, .back-icon {
+    font-size: 1.3rem;
+    color: white;
+    padding: 0.3rem;
+    border-radius: 50%;
+}
+
+.settings-icon:hover {
+    transform: rotate(15deg);
+}
+
+/* Removed hover effect for settings icon */
+.back-icon:hover {
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.panel-header h2 {
+    margin: 0;
+}
+
+.add-drink-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+}
+
+.add-drink-btn i {
+    font-size: 1.2rem;
+}
+
+.admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.5rem;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 4px 4px;
+}
+
+/* Sales Panel */
+.sales-panel {
+    margin-bottom: 1rem;
+}
+
+.sales-panel h2 {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.sales-form {
+    margin-bottom: 2rem;
+}
+
+.update-info {
+    text-align: center;
+    margin: 0 0 0.5rem;
+    padding: 0.3rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.update-info p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Inventory Panel Styles */
+.inventory-panel {
+    margin-bottom: 2rem;
+    background-color: #fff;
+    padding: 0;
+    border-radius: 4px;
+}
+
+.inventory-panel h2 {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.inventory-list {
+    margin-top: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.inventory-header {
+    display: grid;
+    grid-template-columns: 3fr repeat(4, 1fr) 1fr;
+    padding: 0.75rem 1rem;
+    background-color: #f8f9fa;
+    font-weight: 600;
+    border-bottom: 1px solid #ddd;
+}
+
+.inventory-item {
+    display: grid;
+    grid-template-columns: 3fr repeat(4, 1fr) 1fr;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.inventory-item:last-child {
+    border-bottom: none;
+}
+
+.inventory-item:hover {
+    background-color: #f8f9fa;
+}
+
+.col-name {
+    font-weight: bold;
+}
+
+.col-price {
+    text-align: center;
+}
+
+.col-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Drink form styles */
+.drink-form {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.drink-form h3 {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+    font-size: 1.4rem;
+}
+
+.form-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+}
+
+/* Settings Panel */
+.settings-panel {
+    margin-bottom: 2rem;
+}
+
+.settings-panel h2 {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.settings-form {
+    max-width: 600px;
+    margin-bottom: 3rem;
+}
+
+.backup-section {
+    margin-bottom: 2rem;
+}
+
+.backup-info {
+    margin-bottom: 1.5rem;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.backup-section h2 {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.backup-list h3 {
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+}
+.backup-form {
+    margin-top: 1rem;
+}
+
+.backups-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+}
+
+.backups-table th,
+.backups-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.backups-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.backups-table tr:last-child td {
+    border-bottom: none;
+}
+
+.backups-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.btn-restore, .btn-delete {
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.col-actions .btn-edit {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+    padding: 0.375rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+.col-actions .btn-edit:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.btn-delete {
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.btn-restore {
+    background-color: #28a745;  /* Changed from teal to green */
+    border-color: #28a745;
+    color: white;
+}
+
+.btn-restore:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+    text-decoration: none;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    padding: 0.375rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+    text-decoration: none;
+    color: white;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    /* Improve touch experience on tablets */
+    .drink-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 0.5rem;
+    }
+    
+    .drink-card, .new-drink-card {
+        padding: 0.75rem;
+        height: 160px;
+    }
+    
+    .add-indicator {
+        font-size: 0.85rem;
+        height: 30px;
+    }
+    
+    .scale-control-container {
+        padding: 0.5rem;
+    }
+    
+    .scale-control {
+        width: 50%;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Compact layouts for phones */
+    .drink-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4rem;
+    }
+    
+    .admin-container {
+        padding: 0.5rem;
+    }
+    
+    .drink-card, .new-drink-card {
+        padding: 0.6rem;
+        height: 150px;
+        border-radius: 6px;
+    }
+    
+    .drink-name {
+        font-size: 0.95rem;
+        height: 3.8rem;
+    }
+    
+    .drink-card .drink-price {
+        font-size: 1.4rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .drink-trend {
+        font-size: 0.9rem;
+        height: 1.35rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .new-drink-card .drink-icon {
+        font-size: 1.6rem;
+        height: 2.4rem;
+    }
+    
+    .add-indicator {
+        font-size: 0.8rem;
+        height: 28px;
+    }
+    
+    .scale-control-label, .scale-value {
+        font-size: 0.8rem;
+    }
+}

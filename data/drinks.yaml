@@ -1,0 +1,70 @@
+Abita Brewing Company - Purple Haze:
+  current_price: 2.0
+  initial_price: 3.0
+  max_price: 10.0
+  min_price: 2.0
+  sales_count: 0
+  trend: stable
+Cigar City Brewing - Jai Alai IPA:
+  current_price: 3.0
+  initial_price: 4.0
+  max_price: 10.0
+  min_price: 3.0
+  sales_count: 0
+  trend: stable
+"Foothills Brewing - People\u2019s Porter":
+  current_price: 3.0
+  initial_price: 5.0
+  max_price: 12.0
+  min_price: 3.0
+  sales_count: 0
+  trend: stable
+Hardywood Park Craft Brewery - Gingerbread Stout:
+  current_price: 4.25
+  initial_price: 5.0
+  max_price: 12.0
+  min_price: 4.25
+  sales_count: 0
+  trend: stable
+SweetWater Brewing Company - 420 Extra Pale Ale:
+  current_price: 3.0
+  initial_price: 4.0
+  max_price: 10.0
+  min_price: 3.0
+  sales_count: 0
+  trend: stable
+Test:
+  current_price: 3.0
+  initial_price: 5.0
+  max_price: 8.0
+  min_price: 3.0
+  sales_count: 0
+  trend: down
+Westbrook Brewing Co. - Gose:
+  current_price: 3.5
+  initial_price: 4.25
+  max_price: 12.0
+  min_price: 3.5
+  sales_count: 0
+  trend: stable
+Wicked Weed Brewing - Pernicious IPA:
+  current_price: 2.75
+  initial_price: 3.5
+  max_price: 10.0
+  min_price: 2.75
+  sales_count: 0
+  trend: stable
+test2:
+  current_price: 3.0
+  initial_price: 5.0
+  max_price: 8.0
+  min_price: 3.0
+  sales_count: 0
+  trend: down
+test3:
+  current_price: 3.0
+  initial_price: 5.0
+  max_price: 8.0
+  min_price: 3.0
+  sales_count: 0
+  trend: down
