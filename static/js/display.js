@@ -1,5 +1,8 @@
 // JavaScript for the display menu page - TV-Optimized version
 
+// Audio element for bell sound
+let bellSound;
+
 // DOM ready function
 function ready(fn) {
     if (document.readyState !== 'loading') {
@@ -122,6 +125,9 @@ function initCountdown() {
         timeUntilUpdate -= 1;
         
         if (timeUntilUpdate <= 0) {
+            // Play bell sound when timer reaches zero
+            playBellSound();
+            
             // When countdown reaches zero, update drinks list
             updateDrinksList();
         } else {
@@ -197,8 +203,54 @@ function optimizeForTV() {
     }
 }
 
+// Preload the bell sound
+function preloadAudio() {
+    bellSound = new Audio('/static/sounds/threeBells.wav');
+    bellSound.load();
+    
+    // Set initial state
+    bellSound.isPlaying = false;
+    
+    // Make sure the isPlaying flag is reset if the sound stops for any reason
+    bellSound.addEventListener('ended', function() {
+        bellSound.isPlaying = false;
+    });
+    
+    bellSound.addEventListener('pause', function() {
+        bellSound.isPlaying = false;
+    });
+    
+    bellSound.addEventListener('error', function() {
+        bellSound.isPlaying = false;
+    });
+}
+
+// Play bell sound
+function playBellSound() {
+    if (bellSound && !bellSound.isPlaying) {
+        // Prevent playing again until sound finishes
+        bellSound.isPlaying = true;
+        
+        // Reset to beginning
+        bellSound.currentTime = 0;
+        
+        // Play the sound
+        bellSound.play().catch(error => {
+            console.error('Error playing sound:', error);
+            bellSound.isPlaying = false;
+        });
+        
+        // When sound ends, reset the isPlaying flag
+        bellSound.onended = function() {
+            bellSound.isPlaying = false;
+        };
+    }
+}
+
 // Initialize page
 ready(function() {
+    // Preload bell sound
+    preloadAudio();
     // Get initial update interval from the page
     const countdownElement = document.getElementById('countdown-timer');
     if (countdownElement) {
