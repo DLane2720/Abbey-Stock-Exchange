@@ -22,8 +22,8 @@ A dynamic pricing system for bars that simulates a stock market for drinks. Pric
 
 1. Clone this repository:
    ```
-   git clone https://your-repository-url/Exchange3_dev.git
-   cd Exchange3_dev
+   git clone https://github.com/DLane2720/Abbey-Stock-Exchange.git
+   cd Abbey-Stock-Exchange
    ```
 
 2. Install dependencies:
