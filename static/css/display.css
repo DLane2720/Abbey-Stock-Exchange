@@ -2,6 +2,7 @@
 :root {
     --scale-factor: 1;
     --base-font-size: 16px;
+    --items-count: 8; /* Default number of items */
 }
 
 /* Reset any potential browser defaults */
@@ -132,14 +133,14 @@ body.display-menu {
 .drink-item {
     display: grid;
     grid-template-columns: 4fr 1fr 1fr;
-    padding: calc(1.25rem * var(--scale-factor)) calc(1.5rem * var(--scale-factor)); /* Increased padding */
+    padding: calc(0.8rem * var(--scale-factor)) calc(1.5rem * var(--scale-factor)); /* Reduced padding */
     border-bottom: calc(1px * var(--scale-factor)) solid #222;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
     box-sizing: border-box;
     width: 100%;
-    min-height: calc(5rem * var(--scale-factor)); /* Minimum height */
+    flex: 1; /* Make each item take equal space */
 }
 
 .drink-item:nth-child(odd) {
@@ -306,10 +307,19 @@ body.display-menu {
     }
 }
 
-/* Many drinks optimization */
+/* Adapt to number of items automatically */
+.drinks-list.many-items {
+    /* Apply different styles based on number of items */
+}
+
+/* Make items smaller when there are 9-12 items */
 .drinks-list.many-items .drink-item {
-    padding: calc(0.8rem * var(--scale-factor)) calc(1rem * var(--scale-factor));
-    min-height: calc(3.5rem * var(--scale-factor));
+    padding: calc(0.5rem * var(--scale-factor)) calc(1rem * var(--scale-factor));
+}
+
+/* Make items even smaller when there are more than 12 items */
+.drinks-list.many-many-items .drink-item {
+    padding: calc(0.3rem * var(--scale-factor)) calc(0.8rem * var(--scale-factor));
 }
 
 .drinks-list.many-items .drink-name {
@@ -322,6 +332,56 @@ body.display-menu {
 
 .drinks-list.many-items .trend {
     font-size: calc(1.5rem * var(--scale-factor));
+}
+
+/* Dynamic scaling based on item count */
+.drinks-list {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    height: 100% !important; /* Ensure full height */
+}
+
+.drink-item {
+    /* Use the CSS var() function to calculate the height */
+    height: calc(100% / var(--items-count)) !important;
+    min-height: 0 !important;
+    box-sizing: border-box !important;
+    /* Adjust padding based on item count */
+    padding-top: calc(0.5rem * (8 / var(--items-count))) !important;
+    padding-bottom: calc(0.5rem * (8 / var(--items-count))) !important;
+    /* Ensure the grid layout is maintained */
+    display: grid !important;
+    grid-template-columns: 4fr 1fr 1fr !important;
+    /* Ensure vertical alignment */
+    align-items: center !important;
+    /* Add a subtle separator */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Font size scaling based on number of items */
+.drink-name {
+    font-size: calc(2rem * var(--scale-factor) * (1 - (var(--items-count) - 8) * 0.04)) !important; /* Decreases font size as items increase */
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.current-price {
+    font-size: calc(2rem * var(--scale-factor) * (1 - (var(--items-count) - 8) * 0.04)) !important; /* Decreases font size as items increase */
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s ease;
+}
+
+.trend {
+    font-size: calc(1.8rem * var(--scale-factor) * (1 - (var(--items-count) - 8) * 0.04)) !important; /* Decreases font size as items increase */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Optimize scrollbar for scaled interface */

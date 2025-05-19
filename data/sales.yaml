@@ -447,3 +447,15 @@
 - item_name: Wicked Weed Brewing - Pernicious IPA
   price: 2.75
   timestamp: '2025-04-22T19:20:06.236276'
+- item_name: Artisanal Warheads (Sour)
+  price: 5.5
+  timestamp: '2025-05-19T18:16:34.016345'
+- item_name: Topping Goliath Psudo Sue (Pale Ale)
+  price: 4.5
+  timestamp: '2025-05-19T18:16:34.742295'
+- item_name: Golden Road Bloomin's Blonde
+  price: 3.5
+  timestamp: '2025-05-19T18:17:08.440229'
+- item_name: Ghost Runner Red Blend (Wine)
+  price: 5.5
+  timestamp: '2025-05-19T18:17:08.967497'

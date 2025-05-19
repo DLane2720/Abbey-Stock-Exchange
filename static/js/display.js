@@ -49,11 +49,19 @@ function updateDrinksList() {
             // Count the items for styling purposes
             const itemCount = sortedDrinks.length;
             
-            // Add many-items class if we have many drinks
-            if (itemCount > 10) {
+            // Apply classes based on the number of items for responsive display
+            if (itemCount > 12) {
+                drinksList.classList.add('many-many-items');
                 drinksList.classList.add('many-items');
+                document.documentElement.style.setProperty('--items-count', itemCount);
+            } else if (itemCount > 8) {
+                drinksList.classList.add('many-items');
+                drinksList.classList.remove('many-many-items');
+                document.documentElement.style.setProperty('--items-count', itemCount);
             } else {
                 drinksList.classList.remove('many-items');
+                drinksList.classList.remove('many-many-items');
+                document.documentElement.style.setProperty('--items-count', itemCount);
             }
             
             for (const [name, drink] of sortedDrinks) {
@@ -182,10 +190,18 @@ function updateScaleFactor() {
     const drinksList = document.getElementById('drinks-list');
     if (drinksList) {
         const itemCount = drinksList.children.length;
-        if (itemCount > 10) {
+        // Set the CSS variable for item count
+        document.documentElement.style.setProperty('--items-count', itemCount);
+        
+        if (itemCount > 12) {
+            drinksList.classList.add('many-many-items');
             drinksList.classList.add('many-items');
+        } else if (itemCount > 8) {
+            drinksList.classList.add('many-items');
+            drinksList.classList.remove('many-many-items');
         } else {
             drinksList.classList.remove('many-items');
+            drinksList.classList.remove('many-many-items');
         }
     }
 }
