@@ -35,7 +35,7 @@
         <form method="POST" action="{{ url_for('admin_sales') }}" class="sales-form" id="sales-form">
             
             <div class="drink-grid">
-                {% for name, drink in drinks.items() %}
+                {% for name, drink in drinks.items()|sort(attribute='1.position') %}
                 <button type="submit" name="item_name" value="{{ name }}" class="drink-card">
                     <div class="drink-name">{{ name }}</div>
                     <div class="price-trend-container">

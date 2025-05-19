@@ -6,6 +6,10 @@ import shutil
 import time
 from datetime import datetime, timedelta
 import yaml
+from collections import OrderedDict
+
+# Add YAML representer for OrderedDict to preserve order
+yaml.add_representer(OrderedDict, lambda dumper, data: dumper.represent_mapping('tag:yaml.org,2002:map', data.items()))
 
 def create_backup(data_dir):
     """
@@ -41,13 +45,21 @@ def create_backup(data_dir):
     with open(drinks_file, 'r') as f:
         drinks = yaml.safe_load(f)
     
+    # Ensure ordering is maintained by using an OrderedDict
+    if not isinstance(drinks, OrderedDict):
+        drinks = OrderedDict(drinks)
+    
+    # Sort drinks by position
+    sorted_drinks = sorted(drinks.items(), key=lambda x: x[1].get('position', 0))
+    
     # Create backup with essential drink information
-    backup_data = {}
-    for drink_name, drink_info in drinks.items():
+    backup_data = OrderedDict()
+    for drink_name, drink_info in sorted_drinks:
         backup_data[drink_name] = {
             'initial_price': drink_info.get('initial_price'),
             'min_price': drink_info.get('min_price'),
-            'max_price': drink_info.get('max_price')
+            'max_price': drink_info.get('max_price'),
+            'position': drink_info.get('position', 0)
         }
     
     # Write backup file
@@ -103,8 +115,12 @@ def restore_from_backup(backup_dir, backup_name, data_dir):
     if os.path.exists(drinks_file):
         with open(drinks_file, 'r') as f:
             current_drinks = yaml.safe_load(f)
+            
+        # Ensure ordering is maintained by using an OrderedDict
+        if not isinstance(current_drinks, OrderedDict):
+            current_drinks = OrderedDict(current_drinks)
     else:
-        current_drinks = {}
+        current_drinks = OrderedDict()
     
     # Update drinks with backup data while preserving current_price and sales_count
     for drink_name, backup_info in backup_data.items():
@@ -113,21 +129,35 @@ def restore_from_backup(backup_dir, backup_name, data_dir):
             current_price = current_drinks[drink_name].get('current_price', backup_info['initial_price'])
             sales_count = current_drinks[drink_name].get('sales_count', 0)
             trend = current_drinks[drink_name].get('trend', 'stable')
+            position = backup_info.get('position', current_drinks[drink_name].get('position', 0))
             
             current_drinks[drink_name].update(backup_info)
             current_drinks[drink_name]['current_price'] = current_price
             current_drinks[drink_name]['sales_count'] = sales_count
             current_drinks[drink_name]['trend'] = trend
+            current_drinks[drink_name]['position'] = position
         else:
             # New drink from backup
             current_drinks[drink_name] = backup_info.copy()
             current_drinks[drink_name]['current_price'] = backup_info['initial_price']
             current_drinks[drink_name]['sales_count'] = 0
             current_drinks[drink_name]['trend'] = 'stable'
+            
+            # Ensure position is set
+            if 'position' not in current_drinks[drink_name]:
+                # Find the highest position
+                highest_position = 0
+                for drink_data in current_drinks.values():
+                    position = drink_data.get('position', 0)
+                    highest_position = max(highest_position, position)
+                current_drinks[drink_name]['position'] = highest_position + 1
+    
+    # Sort drinks by position
+    sorted_drinks = OrderedDict(sorted(current_drinks.items(), key=lambda x: x[1].get('position', 0)))
     
     # Save updated drinks file
     with open(drinks_file, 'w') as f:
-        yaml.dump(current_drinks, f)
+        yaml.dump(sorted_drinks, f)
     
     print(f"Successfully restored drinks data from {backup_name}")
     return True

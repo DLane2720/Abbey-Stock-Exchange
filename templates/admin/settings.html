@@ -104,9 +104,10 @@
                 <div class="col-price">Min</div>
                 <div class="col-price">Max</div>
                 <div class="col-actions">Actions</div>
+                <div class="col-reorder">Reorder</div>
             </div>
             
-            {% for name, drink in drinks.items() %}
+            {% for name, drink in drinks.items()|sort(attribute='1.position') %}
             <div class="inventory-item">
                 <div class="col-name">{{ name }}</div>
                 <div class="col-price">${{ "%.2f"|format(drink.current_price) }}</div>
@@ -122,6 +123,23 @@
                         <input type="hidden" name="name" value="{{ name }}">
                         <button type="submit" class="btn btn-delete btn-sm btn-icon-only" onclick="return confirm('Are you sure you want to delete {{ name }}?');">
                             <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </div>
+                <div class="col-reorder">
+                    <form method="POST" action="{{ url_for('admin_settings') }}" class="inline-form">
+                        <input type="hidden" name="action" value="move_up">
+                        <input type="hidden" name="name" value="{{ name }}">
+                        <button type="submit" class="btn btn-sm btn-icon-only btn-move" {% if drink.position == 1 %}disabled{% endif %}>
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin_settings') }}" class="inline-form">
+                        <input type="hidden" name="action" value="move_down">
+                        <input type="hidden" name="name" value="{{ name }}">
+                        {% set highest_position = drinks.values()|map(attribute='position')|list|max %}
+                        <button type="submit" class="btn btn-sm btn-icon-only btn-move" {% if drink.position == highest_position %}disabled{% endif %}>
+                            <i class="fas fa-arrow-down"></i>
                         </button>
                     </form>
                 </div>

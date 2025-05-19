@@ -12,12 +12,16 @@ import tkinter as tk
 from tkinter import ttk
 import sys
 from datetime import datetime
+from collections import OrderedDict
 from pricing import update_prices
 from backup import create_backup, restore_from_backup, list_backups
 from config import load_settings, save_settings
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'bar-stock-exchange-secret-key'
+
+# Add YAML representer for OrderedDict to preserve order
+yaml.add_representer(OrderedDict, lambda dumper, data: dumper.represent_mapping('tag:yaml.org,2002:map', data.items()))
 
 # Add current year to all templates
 @app.context_processor
@@ -66,7 +70,8 @@ def init_app_data():
                 'min_price': 3.00,
                 'max_price': 8.00,
                 'trend': 'stable',
-                'sales_count': 0
+                'sales_count': 0,
+                'position': 1
             },
             'Wine': {
                 'initial_price': 7.00,
@@ -74,7 +79,8 @@ def init_app_data():
                 'min_price': 5.00,
                 'max_price': 12.00,
                 'trend': 'stable',
-                'sales_count': 0
+                'sales_count': 0,
+                'position': 2
             },
             'Cocktail': {
                 'initial_price': 8.00,
@@ -82,7 +88,8 @@ def init_app_data():
                 'min_price': 6.00,
                 'max_price': 15.00,
                 'trend': 'stable',
-                'sales_count': 0
+                'sales_count': 0,
+                'position': 3
             }
         }
         with open(DRINKS_FILE, 'w') as f:
@@ -141,6 +148,9 @@ def display_menu():
     with open(DRINKS_FILE, 'r') as f:
         drinks = yaml.safe_load(f)
     
+    # Sort drinks by position
+    sorted_drinks = OrderedDict(sorted(drinks.items(), key=lambda x: x[1].get('position', 0)))
+    
     # Calculate time until next update
     current_time = time.time()
     last_update = settings.get('last_update', 0)
@@ -148,7 +158,7 @@ def display_menu():
     time_until_update = max(0, update_interval - (current_time - last_update))
     
     return render_template('display/menu.html', 
-                          drinks=drinks, 
+                          drinks=sorted_drinks, 
                           settings=settings,
                           time_until_update=time_until_update)
 
@@ -168,6 +178,9 @@ def admin_sales():
     with open(DRINKS_FILE, 'r') as f:
         drinks = yaml.safe_load(f)
     
+    # Sort drinks by position
+    sorted_drinks = OrderedDict(sorted(drinks.items(), key=lambda x: x[1].get('position', 0)))
+    
     # Handle POST request
     if request.method == 'POST':
         action = request.form.get('action', '')
@@ -179,14 +192,14 @@ def admin_sales():
         print(f"Form data: {request.form}")
         
         # Adding an item (simple sale)
-        if item_name and item_name in drinks:
+        if item_name and item_name in sorted_drinks:
             print(f"Adding {item_name}")
             
             # Record the sale
             sale = {
                 'timestamp': datetime.now().isoformat(),
                 'item_name': item_name,
-                'price': drinks[item_name]['current_price']
+                'price': sorted_drinks[item_name]['current_price']
             }
             
             # Add to sales list
@@ -199,10 +212,10 @@ def admin_sales():
                 yaml.dump(sales, f)
             
             # Update sales count for the drink
-            drinks[item_name]['sales_count'] += 1
+            sorted_drinks[item_name]['sales_count'] += 1
             
             with open(DRINKS_FILE, 'w') as f:
-                yaml.dump(drinks, f)
+                yaml.dump(sorted_drinks, f)
             
             return redirect(url_for('admin_sales'))
     
@@ -213,7 +226,7 @@ def admin_sales():
     time_until_update = max(0, update_interval - (current_time - last_update))
     
     return render_template('admin/sales.html', 
-                          drinks=drinks, 
+                          drinks=sorted_drinks, 
                           settings=settings,
                           price_updated=price_updated,
                           time_until_update=time_until_update)
@@ -229,6 +242,9 @@ def admin_settings():
     # Load drinks data for inventory management
     with open(DRINKS_FILE, 'r') as f:
         drinks = yaml.safe_load(f)
+        
+    # Sort drinks by position
+    sorted_drinks = OrderedDict(sorted(drinks.items(), key=lambda x: x[1].get('position', 0)))
     
     # Handle POST request for settings or inventory management
     if request.method == 'POST':
@@ -257,7 +273,7 @@ def admin_settings():
             return redirect(url_for('admin_settings'))
         
         # Handle inventory actions
-        elif action in ['add', 'edit', 'delete']:
+        elif action in ['add', 'edit', 'delete', 'move_up', 'move_down']:
             if action == 'add' or action == 'edit':
                 name = request.form.get('name')
                 original_name = request.form.get('original_name', name)  # Get original name if specified
@@ -272,44 +288,97 @@ def admin_settings():
                 
                 if name:
                     # For editing: check if name has changed
-                    if action == 'edit' and original_name in drinks and original_name != name:
+                    if action == 'edit' and original_name in sorted_drinks and original_name != name:
                         # Copy the existing drink with new name
-                        drink_data = drinks[original_name].copy()
+                        drink_data = sorted_drinks[original_name].copy()
                         # Update with new values
                         drink_data['initial_price'] = initial_price
                         drink_data['min_price'] = min_price
                         drink_data['max_price'] = max_price
                         # Add with new name
-                        drinks[name] = drink_data
+                        sorted_drinks[name] = drink_data
                         # Remove old name
-                        del drinks[original_name]
-                    elif action == 'add' or name not in drinks:
+                        del sorted_drinks[original_name]
+                    elif action == 'add' or name not in sorted_drinks:
                         # For a new drink
-                        drinks[name] = {
+                        # Find the highest position value
+                        highest_position = 0
+                        for drink_data in sorted_drinks.values():
+                            position = drink_data.get('position', 0)
+                            highest_position = max(highest_position, position)
+                        
+                        sorted_drinks[name] = {
                             'initial_price': initial_price,
                             'current_price': initial_price,
                             'min_price': min_price,
                             'max_price': max_price,
                             'trend': 'stable',
-                            'sales_count': 0
+                            'sales_count': 0,
+                            'position': highest_position + 1
                         }
                     else:  # For editing without changing the name
                         # Update the drink properties
-                        drinks[name]['initial_price'] = initial_price
-                        drinks[name]['min_price'] = min_price
-                        drinks[name]['max_price'] = max_price
+                        sorted_drinks[name]['initial_price'] = initial_price
+                        sorted_drinks[name]['min_price'] = min_price
+                        sorted_drinks[name]['max_price'] = max_price
                     
                     with open(DRINKS_FILE, 'w') as f:
-                        yaml.dump(drinks, f)
+                        yaml.dump(sorted_drinks, f)
             
             elif action == 'delete':
                 name = request.form.get('name')
                 
-                if name and name in drinks:
-                    del drinks[name]
+                if name and name in sorted_drinks:
+                    del sorted_drinks[name]
+                    
+                    # Reorder the positions to avoid gaps
+                    drinks_list = list(sorted_drinks.items())
+                    drinks_list.sort(key=lambda x: x[1].get('position', 0))
+                    
+                    # Reassign positions
+                    for i, (drink_name, drink_data) in enumerate(drinks_list):
+                        sorted_drinks[drink_name]['position'] = i + 1
                     
                     with open(DRINKS_FILE, 'w') as f:
-                        yaml.dump(drinks, f)
+                        yaml.dump(sorted_drinks, f)
+                        
+            elif action == 'move_up' or action == 'move_down':
+                name = request.form.get('name')
+                
+                if name and name in sorted_drinks:
+                    current_position = sorted_drinks[name].get('position', 0)
+                    
+                    # Find the drink to swap with
+                    swap_name = None
+                    swap_position = 0
+                    
+                    if action == 'move_up':
+                        # Find the drink with the next lower position
+                        prev_position = 0
+                        for drink_name, drink_data in sorted_drinks.items():
+                            position = drink_data.get('position', 0)
+                            if position < current_position and position > prev_position:
+                                prev_position = position
+                                swap_name = drink_name
+                        swap_position = prev_position
+                    else:  # move_down
+                        # Find the drink with the next higher position
+                        next_position = float('inf')
+                        for drink_name, drink_data in sorted_drinks.items():
+                            position = drink_data.get('position', 0)
+                            if position > current_position and position < next_position:
+                                next_position = position
+                                swap_name = drink_name
+                        swap_position = next_position
+                    
+                    # If we found a drink to swap with, swap positions
+                    if swap_name:
+                        print(f"Swapping {name} (pos {current_position}) with {swap_name} (pos {swap_position})")
+                        sorted_drinks[name]['position'] = swap_position
+                        sorted_drinks[swap_name]['position'] = current_position
+                        
+                        with open(DRINKS_FILE, 'w') as f:
+                            yaml.dump(sorted_drinks, f)
             
             return redirect(url_for('admin_settings'))
         
@@ -332,7 +401,7 @@ def admin_settings():
     return render_template('admin/settings.html', 
                           settings=settings,
                           backups=backups,
-                          drinks=drinks)
+                          drinks=sorted_drinks)
 
 @app.route('/admin/restore/<backup_name>')
 def restore_backup(backup_name):
@@ -371,6 +440,11 @@ def api_drinks():
     with open(DRINKS_FILE, 'r') as f:
         drinks = yaml.safe_load(f)
     
+    # Sort drinks by position
+    sorted_drinks = {}
+    for name, drink in sorted(drinks.items(), key=lambda x: x[1].get('position', 0)):
+        sorted_drinks[name] = drink
+    
     # Load settings for countdown
     settings = load_settings(SETTINGS_FILE)
     current_time = time.time()
@@ -379,7 +453,7 @@ def api_drinks():
     time_until_update = max(0, update_interval - (current_time - last_update))
     
     return jsonify({
-        'drinks': drinks,
+        'drinks': sorted_drinks,
         'time_until_update': int(time_until_update)
     })
 

@@ -43,8 +43,11 @@ function updateDrinksList() {
             
             drinksList.innerHTML = '';
             
+            // Sort drinks by position
+            const sortedDrinks = Object.entries(data.drinks).sort((a, b) => a[1].position - b[1].position);
+            
             // Count the items for styling purposes
-            const itemCount = Object.keys(data.drinks).length;
+            const itemCount = sortedDrinks.length;
             
             // Add many-items class if we have many drinks
             if (itemCount > 10) {
@@ -53,7 +56,7 @@ function updateDrinksList() {
                 drinksList.classList.remove('many-items');
             }
             
-            for (const [name, drink] of Object.entries(data.drinks)) {
+            for (const [name, drink] of sortedDrinks) {
                 const drinkItem = document.createElement('div');
                 drinkItem.className = 'drink-item';
                 drinkItem.setAttribute('data-name', name);

@@ -33,7 +33,7 @@
                 </div>
                 
                 <div id="drinks-list" class="drinks-list">
-                    {% for name, drink in drinks.items() %}
+                    {% for name, drink in drinks.items()|sort(attribute='1.position') %}
                     <div class="drink-item" data-name="{{ name }}" data-price="{{ drink.current_price }}">
                         <div class="drink-name">{{ name }}</div>
                         <div class="current-price">${{ "%.2f"|format(drink.current_price) }}</div>
