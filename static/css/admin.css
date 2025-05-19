@@ -9,7 +9,7 @@ body.admin-panel {
     height: 0.5rem;
 }
 
-/* Class-based approach for active state */
+/* Class-based approach for active state - used in admin.js */
 .card-active.drink-card {
     background-color: #1e7e34;
     border-color: #1c7430;
@@ -110,7 +110,7 @@ input[type="number"]:disabled {
     min-width: 2rem;
 }
 
-/* Adjust spacing for slider */
+/* Adjust spacing for slider to accommodate the scale control */
 .admin-container {
     margin-bottom: 3rem;
 }
@@ -377,10 +377,6 @@ input[type="number"]:disabled {
     transform: rotate(15deg);
 }
 
-/* Removed hover effect for settings icon */
-.back-icon:hover {
-}
-
 .panel-header {
     display: flex;
     justify-content: space-between;
@@ -594,67 +590,8 @@ input[type="number"]:disabled {
     background-color: #f8f9fa;
 }
 
-.btn-restore, .btn-delete {
-    padding: 0.375rem 0.75rem;
-    border-radius: 0.25rem;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-right: 0.5rem;
-    font-size: 0.9rem;
-}
-
-.col-actions .btn-edit {
-    background-color: #6c757d;
-    border-color: #6c757d;
-    color: white;
-    padding: 0.375rem 0.5rem;
-    font-size: 0.85rem;
-}
-
-.col-actions .btn-edit:hover {
-    background-color: #5a6268;
-    border-color: #545b62;
-}
-
-.btn-delete {
-    padding: 0.375rem 0.75rem;
-    border-radius: 0.25rem;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-right: 0.5rem;
-    font-size: 0.9rem;
-}
-
-.btn-restore {
-    background-color: #28a745;  /* Changed from teal to green */
-    border-color: #28a745;
-    color: white;
-}
-
-.btn-restore:hover {
-    background-color: #218838;
-    border-color: #1e7e34;
-    text-decoration: none;
-    color: white;
-}
-
-.btn-delete {
-    background-color: #dc3545;
-    color: white;
-    padding: 0.375rem 0.5rem;
-    font-size: 0.85rem;
-}
-
-.btn-delete:hover {
-    background-color: #c82333;
-    text-decoration: none;
-    color: white;
+.inline-form {
+    display: inline;
 }
 
 /* Responsive design */

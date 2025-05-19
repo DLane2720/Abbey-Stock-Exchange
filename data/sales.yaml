@@ -435,3 +435,15 @@
 - item_name: Hardywood Park Craft Brewery - Gingerbread Stout
   price: 4.25
   timestamp: '2025-03-27T03:10:44.916726'
+- item_name: Abita Brewing Company - Purple Haze
+  price: 2.0
+  timestamp: '2025-04-22T19:20:04.721366'
+- item_name: "Foothills Brewing - People\u2019s Porter"
+  price: 3.0
+  timestamp: '2025-04-22T19:20:05.378309'
+- item_name: test2
+  price: 3.0
+  timestamp: '2025-04-22T19:20:05.836030'
+- item_name: Wicked Weed Brewing - Pernicious IPA
+  price: 2.75
+  timestamp: '2025-04-22T19:20:06.236276'

@@ -22,18 +22,6 @@
     text-decoration: none;
 }
 
-/* Primary action buttons (blue) - no longer used, kept for compatibility */
-.btn-primary {
-    color: #fff;
-    background-color: #28a745;  /* Changed to match btn-success */
-    border-color: #28a745;
-}
-
-.btn-primary:hover {
-    background-color: #218838;
-    border-color: #1e7e34;
-}
-
 /* Secondary/cancel buttons (gray) */
 .btn-secondary {
     color: #fff;

@@ -1,90 +1,145 @@
-/* Display Menu Styles - TV Optimized Version (16:9) */
+/* Display Menu Styles - TV Optimized Version with 16:9 ratio that always fills width */
+:root {
+    --scale-factor: 1;
+    --base-font-size: 16px;
+}
+
+/* Reset any potential browser defaults */
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body.display-menu {
     background-color: #121212;
     color: #fff;
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* Prevent scrolling on TV screens */
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    /* Allow vertical scrolling when needed */
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
-/* Direct styling of base template elements */
-.display-menu header {
+/* Aspect Ratio Container - maintains 16:9 but always fills width */
+.aspect-ratio-container {
+    position: relative;
+    width: 100%; /* Always full width */
+    padding-top: 56.25%; /* 16:9 Aspect Ratio (9 ÷ 16 = 0.5625 or 56.25%) */
+    background-color: #121212;
+    margin: 0;
+}
+
+.aspect-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+}
+
+/* Header styles */
+.display-header {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1rem;
     background-color: #121212;
     border-bottom: 1px solid #333;
+    padding: calc(1rem * var(--scale-factor));
+    height: calc(120px * var(--scale-factor));
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.display-menu header h1 {
+.display-header h1 {
     margin: 0;
     text-align: center;
-    font-size: 3.2rem;
+    font-size: calc(3.2rem * var(--scale-factor));
     font-weight: 800;
-    letter-spacing: 1px;
-    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+    letter-spacing: calc(1px * var(--scale-factor));
+    text-shadow: 0 calc(3px * var(--scale-factor)) calc(6px * var(--scale-factor)) rgba(0, 0, 0, 0.4);
     color: #f8f8f8;
 }
 
-.display-menu .bar-logo {
-    height: 100px;
-    margin-right: 2rem;
-    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+.bar-logo {
+    height: calc(100px * var(--scale-factor));
+    margin-right: calc(2rem * var(--scale-factor));
+    filter: drop-shadow(0 calc(3px * var(--scale-factor)) calc(6px * var(--scale-factor)) rgba(0, 0, 0, 0.4));
 }
 
-.display-menu main {
+/* Main content area */
+.display-main {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: hidden;
+    width: 100%;
+    height: calc(100% - calc(120px * var(--scale-factor)) - calc(80px * var(--scale-factor))); /* Full height minus header and footer */
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 .menu-container {
     flex: 1;
-    max-width: 1600px;
     width: 90%;
-    margin: 0.75rem auto;
+    height: 100%; /* Make it take full height */
+    margin: calc(0.75rem * var(--scale-factor)) auto;
+    padding: 0;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
 }
 
 .menu-header {
     display: grid;
     grid-template-columns: 4fr 1fr 1fr;
     background-color: #1a1a1a;
-    padding: 0.75rem 1.5rem;
+    padding: calc(0.75rem * var(--scale-factor)) calc(1.5rem * var(--scale-factor));
     font-weight: bold;
-    border-radius: 8px 8px 0 0;
+    border-radius: calc(8px * var(--scale-factor)) calc(8px * var(--scale-factor)) 0 0;
     text-transform: uppercase;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
+    font-size: calc(1.3rem * var(--scale-factor)); /* Increased font size */
+    letter-spacing: calc(1px * var(--scale-factor));
     color: #aaa;
+    box-sizing: border-box;
+    width: 100%;
+    height: calc(3.5rem * var(--scale-factor)); /* Fixed height */
 }
 
 .drinks-list {
-    border: 1px solid #333;
+    border: calc(1px * var(--scale-factor)) solid #333;
     border-top: none;
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 0 calc(8px * var(--scale-factor)) calc(8px * var(--scale-factor));
     overflow: auto;
     flex: 1;
     display: flex;
     flex-direction: column;
     background-color: #121212;
+    width: 100%;
+    height: calc(100% - calc(3.5rem * var(--scale-factor))); /* Full height minus menu header */
+    box-sizing: border-box;
 }
 
 .drink-item {
     display: grid;
     grid-template-columns: 4fr 1fr 1fr;
-    padding: 0.75rem 1.5rem;
-    border-bottom: 1px solid #222;
+    padding: calc(1.25rem * var(--scale-factor)) calc(1.5rem * var(--scale-factor)); /* Increased padding */
+    border-bottom: calc(1px * var(--scale-factor)) solid #222;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: calc(5rem * var(--scale-factor)); /* Minimum height */
 }
 
 .drink-item:nth-child(odd) {
@@ -100,14 +155,14 @@ body.display-menu {
 }
 
 .drink-name {
-    font-size: 1.5rem;
+    font-size: calc(2rem * var(--scale-factor)); /* Increased font size */
     font-weight: 600;
     display: flex;
     align-items: center;
 }
 
 .current-price {
-    font-size: 1.5rem;
+    font-size: calc(2rem * var(--scale-factor)); /* Increased font size */
     font-weight: bold;
     text-align: center;
     display: flex;
@@ -120,7 +175,7 @@ body.display-menu {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.35rem;
+    font-size: calc(1.8rem * var(--scale-factor)); /* Increased font size */
 }
 
 .trend-up {
@@ -145,69 +200,74 @@ body.display-menu {
     animation: highlight-green 2s ease;
 }
 
-/* Style base footer element */
-.display-menu footer {
+/* Footer styles */
+.display-footer {
     background-color: #121212;
     color: #fff;
-    border-top: 1px solid #333;
+    border-top: calc(1px * var(--scale-factor)) solid #333;
     display: flex;
-    justify-content: center; /* Center the timer */
+    justify-content: center;
     align-items: center;
-    padding: 0.5rem 1.5rem;
+    padding: calc(0.5rem * var(--scale-factor)) calc(1.5rem * var(--scale-factor));
+    height: calc(80px * var(--scale-factor));
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .update-timer {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 1.4rem;
+    gap: calc(0.5rem * var(--scale-factor));
+    font-size: calc(1.4rem * var(--scale-factor));
     font-weight: 500;
-    padding: 0.5rem 1.4rem;
-    border-radius: 4px;
+    padding: calc(0.5rem * var(--scale-factor)) calc(1.4rem * var(--scale-factor));
+    border-radius: calc(4px * var(--scale-factor));
     background-color: rgba(255, 255, 255, 0.05);
     white-space: nowrap;
 }
 
 .update-timer span:first-child {
-    color: #fff;  /* Made consistent with table text */
+    color: #fff;
 }
 
 .update-timer span:last-child {
-    color: #fff;  /* Made consistent with table text */
+    color: #fff;
 }
 
 #countdown-timer {
-    font-family: 'Arial', sans-serif;  /* Matched with the body font */
-    font-size: 1.7rem;
+    font-family: 'Arial', sans-serif;
+    font-size: calc(1.7rem * var(--scale-factor));
     font-weight: bold;
     color: #fff;
-    min-width: 4rem; /* Wider to accommodate "0:00" format */
+    min-width: calc(4rem * var(--scale-factor));
     text-align: center;
 }
 
 /* Animations */
 @keyframes pulse-red {
     0% {
-        text-shadow: 0 0 5px rgba(255, 77, 77, 0.4);
+        text-shadow: 0 0 calc(5px * var(--scale-factor)) rgba(255, 77, 77, 0.4);
     }
     50% {
-        text-shadow: 0 0 20px rgba(255, 77, 77, 0.8), 0 0 30px rgba(255, 77, 77, 0.4);
+        text-shadow: 0 0 calc(20px * var(--scale-factor)) rgba(255, 77, 77, 0.8), 
+                     0 0 calc(30px * var(--scale-factor)) rgba(255, 77, 77, 0.4);
     }
     100% {
-        text-shadow: 0 0 5px rgba(255, 77, 77, 0.4);
+        text-shadow: 0 0 calc(5px * var(--scale-factor)) rgba(255, 77, 77, 0.4);
     }
 }
 
 @keyframes pulse-green {
     0% {
-        text-shadow: 0 0 5px rgba(77, 255, 77, 0.4);
+        text-shadow: 0 0 calc(5px * var(--scale-factor)) rgba(77, 255, 77, 0.4);
     }
     50% {
-        text-shadow: 0 0 20px rgba(77, 255, 77, 0.8), 0 0 30px rgba(77, 255, 77, 0.4);
+        text-shadow: 0 0 calc(20px * var(--scale-factor)) rgba(77, 255, 77, 0.8), 
+                     0 0 calc(30px * var(--scale-factor)) rgba(77, 255, 77, 0.4);
     }
     100% {
-        text-shadow: 0 0 5px rgba(77, 255, 77, 0.4);
+        text-shadow: 0 0 calc(5px * var(--scale-factor)) rgba(77, 255, 77, 0.4);
     }
 }
 
@@ -246,122 +306,39 @@ body.display-menu {
     }
 }
 
-/* Optimize for TV display (16:9) */
-@media (aspect-ratio: 16/9), (min-aspect-ratio: 16/9) {
-    .display-menu header {
-        padding: 0.75rem 1.5rem;
-    }
-    
-    .menu-container {
-        margin: 0.5rem auto;
-    }
-    
-    .drink-item {
-        padding: 0.6rem 1.2rem;
-    }
-    
-    /* For 10+ drinks, we need to optimize vertical space */
-    .display-menu header h1 {
-        font-size: 2.8rem;
-    }
-    
-    .display-menu .bar-logo {
-        height: 90px;
-    }
-    
-    .menu-header {
-        padding: 0.5rem 1.2rem;
-    }
+/* Many drinks optimization */
+.drinks-list.many-items .drink-item {
+    padding: calc(0.8rem * var(--scale-factor)) calc(1rem * var(--scale-factor));
+    min-height: calc(3.5rem * var(--scale-factor));
 }
 
-/* Compact view styles for many drinks */
-body.compact-view .drink-item {
-    padding: 0.4rem 1rem;
-    min-height: 0;
-    display: grid;
-    grid-template-columns: 4fr 1fr 1fr;
-    align-items: center;
+.drinks-list.many-items .drink-name {
+    font-size: calc(1.6rem * var(--scale-factor));
 }
 
-body.compact-view .drink-name {
-    font-size: 1.3rem;
+.drinks-list.many-items .current-price {
+    font-size: calc(1.6rem * var(--scale-factor));
 }
 
-body.compact-view .current-price {
-    font-size: 1.3rem;
+.drinks-list.many-items .trend {
+    font-size: calc(1.5rem * var(--scale-factor));
 }
 
-body.compact-view .trend {
-    font-size: 1.2rem;
+/* Optimize scrollbar for scaled interface */
+.drinks-list::-webkit-scrollbar {
+    width: calc(10px * var(--scale-factor));
 }
 
-/* Fallback responsive design for other screens */
-@media (max-width: 1200px) {
-    .display-menu header h1 {
-        font-size: 4.2rem;
-    }
-    
-    .display-menu .bar-logo {
-        height: 120px;
-    }
-    
-    .menu-header {
-        font-size: 1.2rem;
-    }
-    
-    .drink-name {
-        font-size: 1.8rem;
-    }
-    
-    .current-price {
-        font-size: 1.8rem;
-    }
-    
-    .trend {
-        font-size: 1.6rem;
-    }
+.drinks-list::-webkit-scrollbar-track {
+    background: #222;
+    border-radius: 0 0 calc(8px * var(--scale-factor)) 0;
 }
 
-@media (max-width: 768px) {
-    .display-menu header h1 {
-        font-size: 3.3rem;
-    }
-    
-    .display-menu .bar-logo {
-        height: 105px;
-        margin-right: 1.5rem;
-    }
-    
-    .menu-container {
-        width: 95%;
-    }
-    
-    .menu-header {
-        padding: 1rem 1.5rem;
-        font-size: 1rem;
-    }
-    
-    .drink-item {
-        padding: 1rem 1.5rem;
-    }
-    
-    .drink-name {
-        font-size: 1.5rem;
-    }
-    
-    .current-price {
-        font-size: 1.5rem;
-    }
-    
-    .trend {
-        font-size: 1.4rem;
-    }
-    
-    .update-timer {
-        font-size: 1.4rem;
-    }
-    
-    #countdown-timer {
-        font-size: 1.8rem;
-    }
+.drinks-list::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: calc(5px * var(--scale-factor));
+}
+
+.drinks-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

@@ -1,4 +1,4 @@
-// JavaScript for the display menu page - TV-Optimized version
+// JavaScript for the display menu page - TV-Optimized version with full-width 16:9 ratio
 
 // Audio element for bell sound
 let bellSound;
@@ -42,6 +42,16 @@ function updateDrinksList() {
             if (!drinksList) return;
             
             drinksList.innerHTML = '';
+            
+            // Count the items for styling purposes
+            const itemCount = Object.keys(data.drinks).length;
+            
+            // Add many-items class if we have many drinks
+            if (itemCount > 10) {
+                drinksList.classList.add('many-items');
+            } else {
+                drinksList.classList.remove('many-items');
+            }
             
             for (const [name, drink] of Object.entries(data.drinks)) {
                 const drinkItem = document.createElement('div');
@@ -156,49 +166,23 @@ function setupAnimationListeners() {
     });
 }
 
-// Calculate ideal font sizes based on viewport and drink count
-function optimizeForTV() {
-    // Check if the aspect ratio is close to 16:9
-    const aspectRatio = window.innerWidth / window.innerHeight;
-    const isWidescreen = aspectRatio >= 1.7; // Close to 16:9 ratio
+// Function to calculate and update scale factor based on window width
+function updateScaleFactor() {
+    // Get window width and calculate scale factor based on 1920px as reference
+    const windowWidth = window.innerWidth;
+    const scaleFactor = windowWidth / 1920;
     
-    if (isWidescreen) {
-        // Calculate the number of items that can fit vertically
-        const headerHeight = document.querySelector('header').offsetHeight;
-        const footerHeight = document.querySelector('footer').offsetHeight;
-        const menuHeaderHeight = document.querySelector('.menu-header').offsetHeight;
-        
-        const availableHeight = window.innerHeight - headerHeight - footerHeight - menuHeaderHeight;
-        const drinksList = document.querySelector('.drinks-list');
-        const drinkItems = document.querySelectorAll('.drink-item');
-        
-        if (drinksList) {
-            // Apply max-height to prevent overflow
-            drinksList.style.maxHeight = `${availableHeight}px`;
-            
-            // Further optimize if we have many drinks
-            const drinkCount = drinkItems.length;
-            if (drinkCount > 7) {
-                // Apply compact styles for many items
-                document.body.classList.add('compact-view');
-                
-                // Calculate ideal height per item
-                const idealItemHeight = Math.floor(availableHeight / drinkCount) - 2; // 2px for borders
-                
-                // Don't let items get too small
-                const minItemHeight = 36; // minimum reasonable height
-                const itemHeight = Math.max(idealItemHeight, minItemHeight);
-                
-                // Apply consistent height to all items
-                drinkItems.forEach(item => {
-                    item.style.height = `${itemHeight}px`;
-                });
-            } else {
-                document.body.classList.remove('compact-view');
-                drinkItems.forEach(item => {
-                    item.style.height = '';
-                });
-            }
+    // Apply the scale factor to the CSS variable
+    document.documentElement.style.setProperty('--scale-factor', scaleFactor);
+    
+    // Check how many drinks we have and apply appropriate styling
+    const drinksList = document.getElementById('drinks-list');
+    if (drinksList) {
+        const itemCount = drinksList.children.length;
+        if (itemCount > 10) {
+            drinksList.classList.add('many-items');
+        } else {
+            drinksList.classList.remove('many-items');
         }
     }
 }
@@ -251,6 +235,7 @@ function playBellSound() {
 ready(function() {
     // Preload bell sound
     preloadAudio();
+    
     // Get initial update interval from the page
     const countdownElement = document.getElementById('countdown-timer');
     if (countdownElement) {
@@ -269,9 +254,9 @@ ready(function() {
     // Initialize countdown
     initCountdown();
     
-    // Optimize layout for TV display
-    optimizeForTV();
-    window.addEventListener('resize', optimizeForTV);
+    // Set up scale factor based on window width
+    updateScaleFactor();
+    window.addEventListener('resize', updateScaleFactor);
     
     // Poll for updates every 5 seconds
     setInterval(function() {
