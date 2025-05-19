@@ -1,0 +1,84 @@
+<div class="inventory-panel" id="inventory-section">
+    <div class="panel-header">
+        <h2>Manage Drinks</h2>
+        <button id="add-drink-btn" class="btn btn-success">
+            <i class="fas fa-plus-circle"></i> Add New Drink
+        </button>
+    </div>
+    
+    <div id="add-drink-form" class="drink-form hidden">
+        <h3>Add New Drink</h3>
+        <form method="POST" action="{{ url_for('admin_settings') }}">
+            <input type="hidden" name="action" value="add">
+            
+            <div class="form-group">
+                <label for="name">Drink Name:</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="initial_price">Initial Price ($):</label>
+                <input type="number" id="initial_price" name="initial_price" class="form-control" step="0.01" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="custom_min_price" name="custom_min_price" class="form-check-input">
+                    <label for="custom_min_price" class="form-check-label">Set custom minimum price</label>
+                </div>
+                <input type="number" id="min_price" name="min_price" class="form-control" step="0.01" min="0" disabled required>
+            </div>
+            
+            <div class="form-group">
+                <label for="max_price">Maximum Price ($):</label>
+                <input type="number" id="max_price" name="max_price" class="form-control" step="0.01" min="0" required>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">Save Drink</button>
+                <button type="button" id="cancel-add" class="btn btn-secondary">Cancel</button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- This div will be refreshed via AJAX -->
+    <div id="drinks-list-container">
+        {% include "admin/partials/drinks_list.html" %}
+    </div>
+    
+    <div id="edit-drink-form" class="drink-form hidden">
+        <h3>Edit Drink</h3>
+        <form id="edit-drink-form-element" method="POST" action="{{ url_for('admin_settings') }}">
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" id="original-name" name="original_name" value="">
+            
+            <div class="form-group">
+                <label for="edit_name">Drink Name:</label>
+                <input type="text" id="edit_name" name="name" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="edit_initial_price">Initial Price ($):</label>
+                <input type="number" id="edit_initial_price" name="initial_price" class="form-control" step="0.01" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="edit_custom_min_price" name="custom_min_price" class="form-check-input">
+                    <label for="edit_custom_min_price" class="form-check-label">Set custom minimum price</label>
+                </div>
+                <input type="number" id="edit_min_price" name="min_price" class="form-control" step="0.01" min="0" disabled required>
+            </div>
+            
+            <div class="form-group">
+                <label for="edit_max_price">Maximum Price ($):</label>
+                <input type="number" id="edit_max_price" name="max_price" class="form-control" step="0.01" min="0" required>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">Update Drink</button>
+                <button type="button" id="cancel-edit" class="btn btn-secondary">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

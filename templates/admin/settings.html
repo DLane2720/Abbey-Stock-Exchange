@@ -4,10 +4,15 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
 {% endblock %}
 
 {% block extra_js %}
 <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin/manage_drinks.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin/settings_navigation.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin/drinks_management.js') }}"></script>
 {% endblock %}
 
 {% block body_class %}admin-panel{% endblock %}
@@ -25,341 +30,20 @@
 
 {% block content %}
 <div class="admin-container">
-    <div class="settings-panel">
-        <h2>System Settings</h2>
-        
-        <form method="POST" action="{{ url_for('admin_settings') }}" class="settings-form">
-            <div class="form-group">
-                <label for="update_interval">Price Update Interval (seconds):</label>
-                <input type="number" id="update_interval" name="update_interval" class="form-control" value="{{ settings.update_interval }}" min="30" required>
-                <div class="form-help">How often prices should update (default: 90 seconds)</div>
-            </div>
-            
-            <div class="form-group">
-                <label for="price_change_amount">Price Change Amount ($):</label>
-                <input type="number" id="price_change_amount" name="price_change_amount" class="form-control" value="{{ settings.price_change_amount }}" step="0.10" min="0.10" max="5.00" required>
-                <div class="form-help">How much prices change each update (default: $0.50)</div>
-            </div>
-            
-            <div class="form-group">
-                <label for="logo_path">Bar Logo Path:</label>
-                <input type="text" id="logo_path" name="logo_path" class="form-control" value="{{ settings.logo_path }}">
-                <div class="form-help">URL or path to your bar's logo image (leave empty for no logo)</div>
-            </div>
-            
-            <div class="form-actions">
-                <button type="submit" class="btn btn-success">Save Settings</button>
-            </div>
-        </form>
-    </div>
+    <!-- Navigation that will be used for popup triggers in the future -->
+    <!--{% include "admin/settings/navigation.html" %}-->
     
-    <div class="inventory-panel" id="inventory-section">
-        <div class="panel-header">
-            <h2>Manage Drinks</h2>
-            <button id="add-drink-btn" class="btn btn-success">
-                <i class="fas fa-plus-circle"></i> Add New Drink
-            </button>
-        </div>
+    <!-- Content sections that will be converted to popups -->
+    <div class="settings-content">
+        {% include "admin/settings/system_settings.html" %}
         
-        <div id="add-drink-form" class="drink-form hidden">
-            <h3>Add New Drink</h3>
-            <form method="POST" action="{{ url_for('admin_settings') }}">
-                <input type="hidden" name="action" value="add">
-                
-                <div class="form-group">
-                    <label for="name">Drink Name:</label>
-                    <input type="text" id="name" name="name" class="form-control" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="initial_price">Initial Price ($):</label>
-                    <input type="number" id="initial_price" name="initial_price" class="form-control" step="0.01" min="0" required>
-                </div>
-                
-                <div class="form-group">
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="custom_min_price" name="custom_min_price" class="form-check-input">
-                        <label for="custom_min_price" class="form-check-label">Set custom minimum price</label>
-                    </div>
-                    <input type="number" id="min_price" name="min_price" class="form-control" step="0.01" min="0" disabled required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="max_price">Maximum Price ($):</label>
-                    <input type="number" id="max_price" name="max_price" class="form-control" step="0.01" min="0" required>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-success">Save Drink</button>
-                    <button type="button" id="cancel-add" class="btn btn-secondary">Cancel</button>
-                </div>
-            </form>
-        </div>
+        {% include "admin/settings/manage_drinks.html" %}
         
-        <div class="inventory-list">
-            <div class="inventory-header">
-                <div class="col-name">Drink Name</div>
-                <div class="col-price">Current</div>
-                <div class="col-price">Initial</div>
-                <div class="col-price">Min</div>
-                <div class="col-price">Max</div>
-                <div class="col-actions">Actions</div>
-                <div class="col-reorder">Reorder</div>
-            </div>
-            
-            {% for name, drink in drinks.items()|sort(attribute='1.position') %}
-            <div class="inventory-item">
-                <div class="col-name">{{ name }}</div>
-                <div class="col-price">${{ "%.2f"|format(drink.current_price) }}</div>
-                <div class="col-price">${{ "%.2f"|format(drink.initial_price) }}</div>
-                <div class="col-price">${{ "%.2f"|format(drink.min_price) }}</div>
-                <div class="col-price">${{ "%.2f"|format(drink.max_price) }}</div>
-                <div class="col-actions">
-                    <button class="btn btn-edit btn-sm btn-icon-only" data-name="{{ name }}" data-initial="{{ drink.initial_price }}" data-min="{{ drink.min_price }}" data-max="{{ drink.max_price }}">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <form method="POST" action="{{ url_for('admin_settings') }}" class="inline-form">
-                        <input type="hidden" name="action" value="delete">
-                        <input type="hidden" name="name" value="{{ name }}">
-                        <button type="submit" class="btn btn-delete btn-sm btn-icon-only" onclick="return confirm('Are you sure you want to delete {{ name }}?');">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </form>
-                </div>
-                <div class="col-reorder">
-                    <form method="POST" action="{{ url_for('admin_settings') }}" class="inline-form">
-                        <input type="hidden" name="action" value="move_up">
-                        <input type="hidden" name="name" value="{{ name }}">
-                        <button type="submit" class="btn btn-sm btn-icon-only btn-move" {% if drink.position == 1 %}disabled{% endif %}>
-                            <i class="fas fa-arrow-up"></i>
-                        </button>
-                    </form>
-                    <form method="POST" action="{{ url_for('admin_settings') }}" class="inline-form">
-                        <input type="hidden" name="action" value="move_down">
-                        <input type="hidden" name="name" value="{{ name }}">
-                        {% set highest_position = drinks.values()|map(attribute='position')|list|max %}
-                        <button type="submit" class="btn btn-sm btn-icon-only btn-move" {% if drink.position == highest_position %}disabled{% endif %}>
-                            <i class="fas fa-arrow-down"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        
-        <div id="edit-drink-form" class="drink-form hidden">
-            <h3>Edit Drink</h3>
-            <form method="POST" action="{{ url_for('admin_settings') }}">
-                <input type="hidden" name="action" value="edit">
-                <input type="hidden" id="original-name" name="original_name" value="">
-                
-                <div class="form-group">
-                    <label for="edit_name">Drink Name:</label>
-                    <input type="text" id="edit_name" name="name" class="form-control" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="edit_initial_price">Initial Price ($):</label>
-                    <input type="number" id="edit_initial_price" name="initial_price" class="form-control" step="0.01" min="0" required>
-                </div>
-                
-                <div class="form-group">
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="edit_custom_min_price" name="custom_min_price" class="form-check-input">
-                        <label for="edit_custom_min_price" class="form-check-label">Set custom minimum price</label>
-                    </div>
-                    <input type="number" id="edit_min_price" name="min_price" class="form-control" step="0.01" min="0" disabled required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="edit_max_price">Maximum Price ($):</label>
-                    <input type="number" id="edit_max_price" name="max_price" class="form-control" step="0.01" min="0" required>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-success">Update Drink</button>
-                    <button type="button" id="cancel-edit" class="btn btn-secondary">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-        
-    <div class="backup-section">
-        <h2>Backups</h2>
-        
-        <div class="backup-info">
-            <p>Last backup: 
-                {% if settings.last_backup %}
-                    {{ settings.last_backup|timestamp_to_datetime }}
-                {% else %}
-                    No backups yet
-                {% endif %}
-            </p>
-            <p>Backups are created once per day and contain the drink configuration (initial, min, max prices).</p>
-            
-            <form method="POST" action="{{ url_for('admin_settings') }}" class="backup-form">
-                <input type="hidden" name="action" value="create_backup">
-                <button type="submit" class="btn btn-success">
-                    <i class="fas fa-save"></i> Create Manual Backup
-                </button>
-            </form>
-        </div>
-        
-        <div class="backup-list">
-            <h3>Available Backups</h3>
-            
-            {% if backups %}
-                <table class="backups-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 70%">Date</th>
-                            <th style="width: 30%">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for backup in backups %}
-                        <tr>
-                            <td>{{ backup.readable_time }}</td>
-                            <td>
-                <a href="{{ url_for('restore_backup', backup_name=backup.name) }}" class="btn btn-success btn-sm btn-icon" onclick="return confirm('Are you sure you want to restore this backup? Current data will be replaced.')">
-                                    <i class="fas fa-undo"></i> Restore
-                                </a>
-                                <a href="{{ url_for('delete_backup', backup_name=backup.name) }}" class="btn btn-delete btn-sm btn-icon-only" onclick="return confirm('Are you sure you want to delete this backup? This action cannot be undone.')">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>No backups available.</p>
-            {% endif %}
-        </div>
+        {% include "admin/settings/backups.html" %}
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Show/hide add drink form
-        const addDrinkBtn = document.getElementById('add-drink-btn');
-        const addDrinkForm = document.getElementById('add-drink-form');
-        const cancelAddBtn = document.getElementById('cancel-add');
-        
-        if (addDrinkBtn && addDrinkForm && cancelAddBtn) {
-            // Add event handlers for the custom minimum price checkbox
-            const initialPriceInput = document.getElementById('initial_price');
-            const minPriceInput = document.getElementById('min_price');
-            const customMinPriceCheckbox = document.getElementById('custom_min_price');
-            
-            // Set initial price value first time
-            if (initialPriceInput.value) {
-                minPriceInput.value = initialPriceInput.value;
-            }
-            
-            // Update min price when initial price changes (if checkbox not checked)
-            initialPriceInput.addEventListener('input', function() {
-                if (!customMinPriceCheckbox.checked) {
-                    minPriceInput.value = this.value;
-                }
-            });
-            
-            // Enable/disable min price field based on checkbox
-            customMinPriceCheckbox.addEventListener('change', function() {
-                if (this.checked) {
-                    minPriceInput.disabled = false;
-                    minPriceInput.focus();
-                } else {
-                    minPriceInput.disabled = true;
-                    minPriceInput.value = initialPriceInput.value;
-                }
-            });
-            
-            // Check if URL has #add-drink hash
-            if (window.location.hash === '#add-drink') {
-                addDrinkForm.classList.remove('hidden');
-                // Scroll to the form
-                document.getElementById('inventory-section').scrollIntoView({ behavior: 'smooth' });
-            }
-            
-            addDrinkBtn.addEventListener('click', function() {
-                addDrinkForm.classList.remove('hidden');
-                
-                const editDrinkForm = document.getElementById('edit-drink-form');
-                if (editDrinkForm) {
-                    editDrinkForm.classList.add('hidden');
-                }
-            });
-            
-            cancelAddBtn.addEventListener('click', function() {
-                addDrinkForm.classList.add('hidden');
-                // Remove hash from URL
-                history.replaceState(null, null, ' ');
-            });
-        }
-        
-        // Show/hide edit drink form
-        const editBtns = document.querySelectorAll('.btn-edit');
-        const editDrinkForm = document.getElementById('edit-drink-form');
-        const cancelEditBtn = document.getElementById('cancel-edit');
-        
-        if (editBtns.length && editDrinkForm && cancelEditBtn) {
-            // Add edit form event handlers for the custom minimum price checkbox
-            const editInitialPriceInput = document.getElementById('edit_initial_price');
-            const editMinPriceInput = document.getElementById('edit_min_price');
-            const editCustomMinPriceCheckbox = document.getElementById('edit_custom_min_price');
-            
-            // Update min price when initial price changes (if checkbox not checked)
-            editInitialPriceInput.addEventListener('input', function() {
-                if (!editCustomMinPriceCheckbox.checked) {
-                    editMinPriceInput.value = this.value;
-                }
-            });
-            
-            // Enable/disable min price field based on checkbox
-            editCustomMinPriceCheckbox.addEventListener('change', function() {
-                if (this.checked) {
-                    editMinPriceInput.disabled = false;
-                    editMinPriceInput.focus();
-                } else {
-                    editMinPriceInput.disabled = true;
-                    editMinPriceInput.value = editInitialPriceInput.value;
-                }
-            });
-            
-            // Set up edit buttons click event
-            editBtns.forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    const name = this.getAttribute('data-name');
-                    const initial = this.getAttribute('data-initial');
-                    const min = this.getAttribute('data-min');
-                    const max = this.getAttribute('data-max');
-                    
-                    document.getElementById('original-name').value = name;
-                    document.getElementById('edit_name').value = name;
-                    document.getElementById('edit_initial_price').value = initial;
-                    document.getElementById('edit_min_price').value = min;
-                    document.getElementById('edit_max_price').value = max;
-                    
-                    // Check if min price is different from initial price
-                    const customMinPrice = parseFloat(min) !== parseFloat(initial);
-                    editCustomMinPriceCheckbox.checked = customMinPrice;
-                    editMinPriceInput.disabled = !customMinPrice;
-                    
-                    editDrinkForm.classList.remove('hidden');
-                    
-                    if (addDrinkForm) {
-                        addDrinkForm.classList.add('hidden');
-                    }
-                });
-            });
-            
-            cancelEditBtn.addEventListener('click', function() {
-                editDrinkForm.classList.add('hidden');
-            });
-        }
-    });
-</script>
+<!-- No scripts here, they've been moved to their respective component JS files -->
 {% endblock %}

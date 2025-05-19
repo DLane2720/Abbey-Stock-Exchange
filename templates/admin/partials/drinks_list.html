@@ -1,0 +1,37 @@
+<div class="inventory-list">
+    <div class="inventory-header">
+        <div class="col-name">Drink Name</div>
+        <div class="col-price">Current</div>
+        <div class="col-price">Initial</div>
+        <div class="col-price">Min</div>
+        <div class="col-price">Max</div>
+        <div class="col-actions">Actions</div>
+        <div class="col-reorder">Reorder</div>
+    </div>
+    
+    {% for name, drink in drinks.items()|sort(attribute='1.position') %}
+    <div class="inventory-item">
+        <div class="col-name">{{ name }}</div>
+        <div class="col-price">${{ "%.2f"|format(drink.current_price) }}</div>
+        <div class="col-price">${{ "%.2f"|format(drink.initial_price) }}</div>
+        <div class="col-price">${{ "%.2f"|format(drink.min_price) }}</div>
+        <div class="col-price">${{ "%.2f"|format(drink.max_price) }}</div>
+        <div class="col-actions">
+            <button class="btn btn-edit btn-sm btn-icon-only" data-name="{{ name }}" data-initial="{{ drink.initial_price }}" data-min="{{ drink.min_price }}" data-max="{{ drink.max_price }}">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-delete btn-sm btn-icon-only delete-drink-btn" data-name="{{ name }}" onclick="return confirm('Are you sure you want to delete {{ name }}?');">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+        <div class="col-reorder">
+            <button type="button" class="btn btn-sm btn-icon-only btn-move move-up-btn" data-name="{{ name }}" {% if drink.position == 1 %}disabled{% endif %}>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-icon-only btn-move move-down-btn" data-name="{{ name }}" {% set highest_position = drinks.values()|map(attribute='position')|list|max %} {% if drink.position == highest_position %}disabled{% endif %}>
+                <i class="fas fa-arrow-down"></i>
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>

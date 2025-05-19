@@ -4,10 +4,14 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
 {% endblock %}
 
 {% block extra_js %}
 <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin/manage_drinks.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin/drinks_management.js') }}"></script>
 {% endblock %}
 
 {% block body_class %}admin-panel{% endblock %}
@@ -74,58 +78,61 @@
             <input type="hidden" id="form-action" name="action" value="">
         </form>
         
-        <!-- Manage Drinks Button -->
-        <a href="{{ url_for('admin_settings') }}#inventory-section" class="manage-drinks-btn btn btn-secondary btn-wide">
+        <!-- Manage Drinks Button - Now triggers the modal instead of navigating -->
+        <a href="javascript:void(0)" class="manage-drinks-btn btn btn-secondary btn-wide">
             <i class="fas fa-cogs"></i> Manage All Drinks
         </a>
     </div>
     
     <!-- Add Drink Modal -->
-    <div id="add-drink-modal" class="modal hidden">
-        <div class="modal-overlay"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New Drink</h3>
-                <button type="button" class="modal-close-btn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="{{ url_for('admin_settings') }}" id="add-drink-form">
-                    <input type="hidden" name="action" value="add">
-                    
-                    <div class="form-group">
-                        <label for="name">Drink Name:</label>
-                        <input type="text" id="name" name="name" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="initial_price">Initial Price ($):</label>
-                        <input type="number" id="initial_price" name="initial_price" class="form-control" step="0.01" min="0" value="5.00" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <div class="checkbox-container">
-                            <input type="checkbox" id="custom_min_price" name="custom_min_price" class="form-check-input">
-                            <label for="custom_min_price" class="form-check-label">Set custom minimum price</label>
-                        </div>
-                        <input type="number" id="min_price" name="min_price" class="form-control" step="0.01" min="0" value="5.00" disabled required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="max_price">Maximum Price ($):</label>
-                        <input type="number" id="max_price" name="max_price" class="form-control" step="0.01" min="0" value="8.00" required>
-                    </div>
-                    
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-success">Save Drink</button>
-                        <button type="button" class="btn btn-secondary modal-cancel-btn">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+<div id="add-drink-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+    <div class="modal-header">
+    <h3>Add New Drink</h3>
+    <button type="button" class="modal-close-btn">
+    <i class="fas fa-times"></i>
+    </button>
+    </div>
+    <div class="modal-body">
+    <form method="POST" action="{{ url_for('admin_settings') }}" id="modal-add-drink-form">
+    <input type="hidden" name="action" value="add">
+    
+    <div class="form-group">
+    <label for="modal_name">Drink Name:</label>
+    <input type="text" id="modal_name" name="name" class="form-control" required>
+    </div>
+    
+    <div class="form-group">
+    <label for="modal_initial_price">Initial Price ($):</label>
+    <input type="number" id="modal_initial_price" name="initial_price" class="form-control" step="0.01" min="0" value="5.00" required>
+    </div>
+    
+    <div class="form-group">
+    <div class="checkbox-container">
+    <input type="checkbox" id="modal_custom_min_price" name="custom_min_price" class="form-check-input">
+    <label for="modal_custom_min_price" class="form-check-label">Set custom minimum price</label>
+    </div>
+    <input type="number" id="modal_min_price" name="min_price" class="form-control" step="0.01" min="0" value="5.00" disabled required>
+    </div>
+    
+    <div class="form-group">
+    <label for="modal_max_price">Maximum Price ($):</label>
+    <input type="number" id="modal_max_price" name="max_price" class="form-control" step="0.01" min="0" value="8.00" required>
+    </div>
+    
+    <div class="form-actions">
+    <button type="submit" class="btn btn-success">Save Drink</button>
+    <button type="button" class="btn btn-secondary modal-cancel-btn">Cancel</button>
+    </div>
+    </form>
+    </div>
     </div>
 </div>
+</div>
+
+<!-- Include the Manage Drinks Modal -->
+{% include "admin/modals/manage_drinks_modal.html" %}
 
 <!-- Scale Control Slider -->
 <div class="scale-control-container">

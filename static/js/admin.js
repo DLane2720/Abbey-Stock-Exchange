@@ -122,7 +122,102 @@ function setupCardFeedback() {
     });
 }
 
-// Inventory forms management was removed as it's now handled by modal dialogs
+// Add Drink and Open Add Drink Modal functionality
+function initAddDrinkModal() {
+    const openModalBtn = document.getElementById('open-add-drink-modal');
+    const addDrinkModal = document.getElementById('add-drink-modal');
+    
+    if (openModalBtn && addDrinkModal) {
+        openModalBtn.addEventListener('click', function() {
+            openModal(addDrinkModal);
+            // Focus on the drink name input
+            setTimeout(() => {
+                document.getElementById('modal_name').focus();
+            }, 100);
+        });
+    }
+    
+    // Add form handling with AJAX
+    const addDrinkForm = document.getElementById('modal-add-drink-form');
+    if (addDrinkForm) {
+        addDrinkForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Create FormData object
+            const formData = new FormData(this);
+            
+            // Get the form action URL
+            const formAction = this.getAttribute('action');
+            
+            // Send POST request
+            fetch(formAction, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Close modal
+                    closeModal(addDrinkModal);
+                    // Reset form for next use
+                    this.reset();
+                    
+                    // Refresh the drinks list in the manage drinks modal
+                    if (typeof refreshDrinksList === 'function') {
+                        refreshDrinksList();
+                    } else {
+                        // If we're not on a page with the refreshDrinksList function,
+                        // just reload the page
+                        window.location.reload();
+                    }
+                } else {
+                    alert('Error adding drink. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        });
+        
+        // Handle custom minimum price checkbox
+        const initialPriceInput = document.getElementById('modal_initial_price');
+        const minPriceInput = document.getElementById('modal_min_price');
+        const customMinPriceCheckbox = document.getElementById('modal_custom_min_price');
+        
+        if (initialPriceInput && minPriceInput && customMinPriceCheckbox) {
+            // Set initial price value first time
+            if (initialPriceInput.value) {
+                minPriceInput.value = initialPriceInput.value;
+            }
+            
+            // Update min price when initial price changes (if checkbox not checked)
+            initialPriceInput.addEventListener('input', function() {
+                if (!customMinPriceCheckbox.checked) {
+                    minPriceInput.value = this.value;
+                }
+            });
+            
+            // Enable/disable min price field based on checkbox
+            customMinPriceCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    minPriceInput.disabled = false;
+                    minPriceInput.focus();
+                } else {
+                    minPriceInput.disabled = true;
+                    minPriceInput.value = initialPriceInput.value;
+                }
+            });
+        }
+    }
+    
+    // Modal cancel button
+    const cancelModalBtn = document.querySelector('.modal-cancel-btn');
+    if (cancelModalBtn && addDrinkModal) {
+        cancelModalBtn.addEventListener('click', function() {
+            closeModal(addDrinkModal);
+        });
+    }
+}
 
 // Initialize the page
 ready(function() {
@@ -131,9 +226,8 @@ ready(function() {
         initSalesCountdown();
         initScaleControl();
         setupCardFeedback();
+        initAddDrinkModal();
     }
-    
-    // Inventory panel handling removed as it's now done with modals
     
     // Handle alerts (auto-hide after 5 seconds)
     const alerts = document.querySelectorAll('.alert');

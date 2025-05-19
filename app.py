@@ -225,9 +225,13 @@ def admin_sales():
     update_interval = settings.get('update_interval', 90)
     time_until_update = max(0, update_interval - (current_time - last_update))
     
+    # Get list of available backups for modals
+    backups = list_backups(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'backups'))
+    
     return render_template('admin/sales.html', 
                           drinks=sorted_drinks, 
                           settings=settings,
+                          backups=backups,
                           price_updated=price_updated,
                           time_until_update=time_until_update)
 
@@ -456,6 +460,28 @@ def api_drinks():
         'drinks': sorted_drinks,
         'time_until_update': int(time_until_update)
     })
+
+@app.route('/api/drinks/html')
+def api_drinks_html():
+    """Return the drink list as HTML for AJAX refreshing"""
+    # Load drinks data
+    with open(DRINKS_FILE, 'r') as f:
+        drinks = yaml.safe_load(f)
+    
+    # Sort drinks by position
+    sorted_drinks = OrderedDict(sorted(drinks.items(), key=lambda x: x[1].get('position', 0)))
+    
+    # Get backups for the template context
+    backups = list_backups(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'backups'))
+    
+    # Get settings
+    settings = load_settings(SETTINGS_FILE)
+    
+    # Render just the drinks list part of the template
+    return render_template('admin/partials/drinks_list.html', 
+                          drinks=sorted_drinks,
+                          settings=settings,
+                          backups=backups)
 
 def create_status_window():
     # Create the tkinter window

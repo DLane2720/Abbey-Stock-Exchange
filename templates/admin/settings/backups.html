@@ -1,0 +1,54 @@
+<div class="backup-section" id="backups-section">
+    <!-- This section can be converted to a modal popup in the future -->
+    <h2>Backups</h2>
+    
+    <div class="backup-info">
+        <p>Last backup: 
+            {% if settings.last_backup %}
+                {{ settings.last_backup|timestamp_to_datetime }}
+            {% else %}
+                No backups yet
+            {% endif %}
+        </p>
+        <p>Backups are created once per day and contain the drink configuration (initial, min, max prices).</p>
+        
+        <form method="POST" action="{{ url_for('admin_settings') }}" class="backup-form">
+            <input type="hidden" name="action" value="create_backup">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save"></i> Create Manual Backup
+            </button>
+        </form>
+    </div>
+    
+    <div class="backup-list">
+        <h3>Available Backups</h3>
+        
+        {% if backups %}
+            <table class="backups-table">
+                <thead>
+                    <tr>
+                        <th style="width: 70%">Date</th>
+                        <th style="width: 30%">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for backup in backups %}
+                    <tr>
+                        <td>{{ backup.readable_time }}</td>
+                        <td>
+            <a href="{{ url_for('restore_backup', backup_name=backup.name) }}" class="btn btn-success btn-sm btn-icon" onclick="return confirm('Are you sure you want to restore this backup? Current data will be replaced.')">
+                                <i class="fas fa-undo"></i> Restore
+                            </a>
+                            <a href="{{ url_for('delete_backup', backup_name=backup.name) }}" class="btn btn-delete btn-sm btn-icon-only" onclick="return confirm('Are you sure you want to delete this backup? This action cannot be undone.')">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No backups available.</p>
+        {% endif %}
+    </div>
+</div>

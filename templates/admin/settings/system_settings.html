@@ -1,0 +1,28 @@
+<div class="settings-panel" id="system-settings-section">
+    <!-- This section can be converted to a modal popup in the future -->
+    <h2>System Settings</h2>
+    
+    <form method="POST" action="{{ url_for('admin_settings') }}" class="settings-form">
+        <div class="form-group">
+            <label for="update_interval">Price Update Interval (seconds):</label>
+            <input type="number" id="update_interval" name="update_interval" class="form-control" value="{{ settings.update_interval }}" min="30" required>
+            <div class="form-help">How often prices should update (default: 90 seconds)</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="price_change_amount">Price Change Amount ($):</label>
+            <input type="number" id="price_change_amount" name="price_change_amount" class="form-control" value="{{ settings.price_change_amount }}" step="0.10" min="0.10" max="5.00" required>
+            <div class="form-help">How much prices change each update (default: $0.50)</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="logo_path">Bar Logo Path:</label>
+            <input type="text" id="logo_path" name="logo_path" class="form-control" value="{{ settings.logo_path }}">
+            <div class="form-help">URL or path to your bar's logo image (leave empty for no logo)</div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success">Save Settings</button>
+        </div>
+    </form>
+</div>
