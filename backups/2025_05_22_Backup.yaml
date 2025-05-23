@@ -1,64 +1,40 @@
 Artisanal Warheads (Sour):
-  current_price: 5.5
   initial_price: 5.5
   max_price: 10.0
   min_price: 5.5
   position: 1
-  sales_count: 0
-  trend: stable
 Bell's Two Hearted (IPA):
-  current_price: 4.5
   initial_price: 4.5
   max_price: 10.0
   min_price: 4.5
   position: 2
-  sales_count: 0
-  trend: stable
 Black Oak Chardonnay (Wine):
-  current_price: 4.5
   initial_price: 4.5
   max_price: 12.0
   min_price: 4.5
   position: 3
-  sales_count: 0
-  trend: stable
 Ghost Runner Red Blend (Wine):
-  current_price: 5.5
   initial_price: 5.5
   max_price: 12.0
   min_price: 5.5
   position: 4
-  sales_count: 0
-  trend: stable
 Golden Road Bloomin' Blonde:
-  current_price: 3.5
   initial_price: 3.5
   max_price: 10.0
   min_price: 3.5
   position: 5
-  sales_count: 0
-  trend: stable
 Jester King Doom Forge:
-  current_price: 6.0
   initial_price: 6.0
   max_price: 10.0
   min_price: 6.0
   position: 6
-  sales_count: 0
-  trend: stable
 Narragansett Lager:
-  current_price: 3.5
   initial_price: 3.5
   max_price: 8.0
   min_price: 3.5
   position: 7
-  sales_count: 0
-  trend: stable
 Topping Goliath Psudo Sue (Pale Ale):
-  current_price: 4.5
   initial_price: 4.5
   max_price: 10.0
   min_price: 4.5
   position: 8
-  sales_count: 0
-  trend: stable

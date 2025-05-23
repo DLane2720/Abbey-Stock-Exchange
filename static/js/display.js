@@ -2,6 +2,37 @@
 
 // Audio element for bell sound
 let bellSound;
+let audioContext; // Add audio context for better browser support
+let audioEnabled = false; // Track if audio is enabled
+
+// Audio indicator management
+function updateAudioIndicator(enabled, show = true) {
+    const indicator = document.getElementById('audio-indicator');
+    const icon = document.getElementById('audio-icon');
+    
+    if (!indicator || !icon) return;
+    
+    if (show) {
+        indicator.classList.add('active');
+        
+        if (enabled) {
+            indicator.classList.remove('disabled');
+            indicator.classList.add('enabled');
+            icon.className = 'fas fa-volume-up';
+        } else {
+            indicator.classList.remove('enabled');
+            indicator.classList.add('disabled');
+            icon.className = 'fas fa-volume-mute';
+        }
+        
+        // Auto-hide after 3 seconds
+        setTimeout(() => {
+            indicator.classList.remove('active');
+        }, 3000);
+    } else {
+        indicator.classList.remove('active');
+    }
+}
 
 // DOM ready function
 function ready(fn) {
@@ -134,6 +165,153 @@ function updateCountdown() {
     }
 }
 
+// Preload the bell sound with better error handling
+function preloadAudio() {
+    bellSound = new Audio('/static/sounds/threeBells.wav');
+    bellSound.preload = 'auto';
+    bellSound.volume = 0.8; // Set a reasonable volume
+    
+    // Create audio context for better browser support
+    try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (e) {
+        console.warn('AudioContext not supported:', e);
+    }
+    
+    // Remove the custom isPlaying flag - use the audio element's properties instead
+    
+    bellSound.addEventListener('loadstart', function() {
+        console.log('Bell sound loading started');
+    });
+    
+    bellSound.addEventListener('canplaythrough', function() {
+        console.log('Bell sound ready to play');
+    });
+    
+    bellSound.addEventListener('error', function(e) {
+        console.error('Error loading bell sound:', e);
+    });
+    
+    // Force load the audio
+    bellSound.load();
+}
+
+// Improved bell sound function with better reliability
+async function playBellSound() {
+    if (!bellSound) {
+        console.warn('Bell sound not initialized');
+        return;
+    }
+    
+    try {
+        // Resume audio context if suspended (required for autoplay policy)
+        if (audioContext && audioContext.state === 'suspended') {
+            await audioContext.resume();
+        }
+        
+        // Check if audio is already playing
+        if (!bellSound.paused) {
+            console.log('Bell sound already playing, skipping');
+            return;
+        }
+        
+        // Reset to beginning
+        bellSound.currentTime = 0;
+        
+        // Ensure audio is ready to play
+        if (bellSound.readyState < 2) {
+            console.log('Bell sound not ready, waiting...');
+            await new Promise((resolve, reject) => {
+                const onCanPlay = () => {
+                    bellSound.removeEventListener('canplay', onCanPlay);
+                    bellSound.removeEventListener('error', onError);
+                    resolve();
+                };
+                const onError = (e) => {
+                    bellSound.removeEventListener('canplay', onCanPlay);
+                    bellSound.removeEventListener('error', onError);
+                    reject(e);
+                };
+                bellSound.addEventListener('canplay', onCanPlay);
+                bellSound.addEventListener('error', onError);
+                
+                // Timeout after 2 seconds
+                setTimeout(() => {
+                    bellSound.removeEventListener('canplay', onCanPlay);
+                    bellSound.removeEventListener('error', onError);
+                    reject(new Error('Timeout waiting for audio to be ready'));
+                }, 2000);
+            });
+        }
+        
+        // Play the sound
+        const playPromise = bellSound.play();
+        
+        if (playPromise !== undefined) {
+            await playPromise;
+            console.log('Bell sound played successfully');
+            
+            // Show audio indicator briefly when bell plays
+            if (audioEnabled) {
+                updateAudioIndicator(true, true);
+            }
+        }
+        
+    } catch (error) {
+        console.error('Error playing bell sound:', error);
+        
+        // If autoplay failed, show a user message or try alternative approach
+        if (error.name === 'NotAllowedError') {
+            console.warn('Audio autoplay blocked by browser. User interaction required.');
+            // You could show a notification to the user here
+        }
+    }
+}
+
+// Add user interaction handler to enable audio (for autoplay policy compliance)
+function enableAudioOnUserInteraction() {
+    const enableAudio = async () => {
+        try {
+            if (audioContext && audioContext.state === 'suspended') {
+                await audioContext.resume();
+                console.log('Audio context resumed after user interaction');
+            }
+            
+            // Test play the audio at low volume to "unlock" it
+            if (bellSound) {
+                const originalVolume = bellSound.volume;
+                bellSound.volume = 0.01;
+                const playPromise = bellSound.play();
+                if (playPromise) {
+                    await playPromise;
+                    bellSound.pause();
+                    bellSound.currentTime = 0;
+                    bellSound.volume = originalVolume;
+                    console.log('Audio unlocked after user interaction');
+                    
+                    // Update audio status and show indicator
+                    audioEnabled = true;
+                    updateAudioIndicator(true, true);
+                }
+            }
+        } catch (e) {
+            console.log('Could not unlock audio:', e);
+            audioEnabled = false;
+            updateAudioIndicator(false, true);
+        }
+        
+        // Remove listeners after first interaction
+        document.removeEventListener('click', enableAudio);
+        document.removeEventListener('keydown', enableAudio);
+        document.removeEventListener('touchstart', enableAudio);
+    };
+    
+    // Listen for user interactions
+    document.addEventListener('click', enableAudio);
+    document.addEventListener('keydown', enableAudio);
+    document.addEventListener('touchstart', enableAudio);
+}
+
 // Initialize countdown timer
 function initCountdown() {
     // Clear any existing timer
@@ -147,6 +325,7 @@ function initCountdown() {
         
         if (timeUntilUpdate <= 0) {
             // Play bell sound when timer reaches zero
+            console.log('Countdown reached zero, playing bell sound');
             playBellSound();
             
             // When countdown reaches zero, update drinks list
@@ -206,54 +385,13 @@ function updateScaleFactor() {
     }
 }
 
-// Preload the bell sound
-function preloadAudio() {
-    bellSound = new Audio('/static/sounds/threeBells.wav');
-    bellSound.load();
-    
-    // Set initial state
-    bellSound.isPlaying = false;
-    
-    // Make sure the isPlaying flag is reset if the sound stops for any reason
-    bellSound.addEventListener('ended', function() {
-        bellSound.isPlaying = false;
-    });
-    
-    bellSound.addEventListener('pause', function() {
-        bellSound.isPlaying = false;
-    });
-    
-    bellSound.addEventListener('error', function() {
-        bellSound.isPlaying = false;
-    });
-}
-
-// Play bell sound
-function playBellSound() {
-    if (bellSound && !bellSound.isPlaying) {
-        // Prevent playing again until sound finishes
-        bellSound.isPlaying = true;
-        
-        // Reset to beginning
-        bellSound.currentTime = 0;
-        
-        // Play the sound
-        bellSound.play().catch(error => {
-            console.error('Error playing sound:', error);
-            bellSound.isPlaying = false;
-        });
-        
-        // When sound ends, reset the isPlaying flag
-        bellSound.onended = function() {
-            bellSound.isPlaying = false;
-        };
-    }
-}
-
 // Initialize page
 ready(function() {
     // Preload bell sound
     preloadAudio();
+    
+    // Enable audio on user interaction (for autoplay policy)
+    enableAudioOnUserInteraction();
     
     // Get initial update interval from the page
     const countdownElement = document.getElementById('countdown-timer');

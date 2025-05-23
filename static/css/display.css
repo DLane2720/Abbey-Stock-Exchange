@@ -402,3 +402,109 @@ body.display-menu {
 .drinks-list::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+/* Audio indicator styles */
+.audio-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.audio-indicator.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.audio-indicator.enabled {
+    background-color: rgba(76, 175, 80, 0.8);
+    border-color: rgba(76, 175, 80, 0.8);
+}
+
+.audio-indicator.disabled {
+    background-color: rgba(244, 67, 54, 0.8);
+    border-color: rgba(244, 67, 54, 0.8);
+}
+
+.audio-indicator i {
+    font-size: 18px;
+    color: white;
+}
+
+/* Scale the audio indicator with the display */
+@media (max-width: 1920px) {
+    .audio-indicator {
+        width: calc(40px * var(--scale-factor));
+        height: calc(40px * var(--scale-factor));
+        bottom: calc(20px * var(--scale-factor));
+        right: calc(20px * var(--scale-factor));
+    }
+    
+    .audio-indicator i {
+        font-size: calc(18px * var(--scale-factor));
+    }
+}
+
+/* Audio indicator styles */
+.audio-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.audio-indicator.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.audio-indicator.enabled {
+    background-color: rgba(76, 175, 80, 0.8);
+    border-color: rgba(76, 175, 80, 0.8);
+}
+
+.audio-indicator.disabled {
+    background-color: rgba(244, 67, 54, 0.8);
+    border-color: rgba(244, 67, 54, 0.8);
+}
+
+.audio-indicator i {
+    font-size: 18px;
+    color: white;
+}
+
+/* Scale the audio indicator with the display */
+@media (max-width: 1920px) {
+    .audio-indicator {
+        width: calc(40px * var(--scale-factor));
+        height: calc(40px * var(--scale-factor));
+        bottom: calc(20px * var(--scale-factor));
+        right: calc(20px * var(--scale-factor));
+    }
+    
+    .audio-indicator i {
+        font-size: calc(18px * var(--scale-factor));
+    }
+}
